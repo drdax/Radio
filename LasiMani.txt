@@ -1,0 +1,23 @@
+Interneta radio uztvērējs. Atskaņo HTTP un MMS (ar MediaElement palīdzību) raidstacijas, kuras noradītas iestatījumos.
+Darbībai nepieciešams .NET Framework 4.0 Client Profile. Bez Windows 7 raidstaciju izvēlei ir jālieto failu saīsnes, piemēram, uz "Radio.exe http://89.187.1.165/NRCU2".
+
+MainWindow.xaml – Lietotāja saskarne.
+MainWindow.xaml.cs – Lietotāja saskarnes notikumu apstrāde.
+Program.cs – Main metode. Raidstacijas un pārslēgšanas pakalpojuma klases.
+Settings.cs – Programmas iestatījumu klase.
+Radio.ico – Programmas ikona. Autors Chris Stark http://darkobra.deviantart.com/art/Tango-Radio-Icon-113897950
+NoRadio.png – Radio uztvērēja attēls. Apzīmē raidstaciju bez logotipa. Izveidots no programmas ikonas, nozāģējot antenu.
+Mute.png – Ieslēgtas skaņas ikona.
+Unmute.png – Izslēgtas skaņas ikona.
+
+Radio.xml – Programmas iestatījumi (raidstaciju saraksts). Šis fails ir nepieciešams programmas darbībai (tam ir jāatrodas EXE mapē).
+<Radio> Iestatījumu dokuments.
+	<LastChannel> Pēdējās atskaņotās raidstacijas interneta adrese.
+	<Channels> Raidstacijas, kuras attēlo JumpList sarakstā un spēj atskaņot.
+		<Channel> Raidstacija.
+			Caption – Pilns stacijas nosaukums.
+			Url – Stacijas raidošā interneta adrese.
+			LogoId – Logotipa nosaukums <Logos> kopā. Neobligāts atribūts.
+	<Logos> Logotipi. Viens logotips drīkst būt vairākām raidstacijām.
+		<Logo> Logotipa attēls (vēlams PNG), kodēts Base64 formātā.
+			Id – Logotipa nosaukums, lai atsauktos no <Channel>.
