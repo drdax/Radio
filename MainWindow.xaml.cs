@@ -42,17 +42,14 @@ namespace DrDax.RadioClient {
 
 		public MainWindow() {
 			InitializeComponent();
-			// http://blogs.msdn.com/nickkramer/archive/2006/03/18/554235.aspx
-			this.Loaded+=(object sender, RoutedEventArgs e) => {
-				HwndSource.FromHwnd(new WindowInteropHelper(this).Handle).AddHook(new HwndSourceHook(WndProc)); // Lai varētu uztvert loga fokusu.
-			};
+			this.Loaded+=Window_Loaded;
 			activeBarBack=(Brush)this.Resources["ActiveBarBack"];
 			inactiveBarBack=(Brush)this.Resources["InactiveBarBack"];
 			mutedIcon=(BitmapImage)this.Resources["MutedIcon"];
 			unmutedIcon=(BitmapImage)this.Resources["UnmutedIcon"];
-			this.CommandBindings.Add(new CommandBinding(MediaCommands.MuteVolume, MuteCmdExecuted, VolumeCmdCanExecute));
-			this.CommandBindings.Add(new CommandBinding(MediaCommands.IncreaseVolume, IncreaseCmdExecuted, VolumeCmdCanExecute));
-			this.CommandBindings.Add(new CommandBinding(MediaCommands.DecreaseVolume, DecreaseCmdExecuted, VolumeCmdCanExecute));
+			this.CommandBindings.Add(new CommandBinding(MediaCommands.MuteVolume, MuteCmd_Executed, VolumeCmd_CanExecute));
+			this.CommandBindings.Add(new CommandBinding(MediaCommands.IncreaseVolume, IncreaseCmd_Executed, VolumeCmd_CanExecute));
+			this.CommandBindings.Add(new CommandBinding(MediaCommands.DecreaseVolume, DecreaseCmd_Executed, VolumeCmd_CanExecute));
 			// Pieliek skaņas atslēgšanas pogu zem programmas sīktēla uzdevumu joslā.
 			muteTaskBtn=new ThumbButtonInfo {
 				Command=MediaCommands.MuteVolume,
@@ -61,36 +58,37 @@ namespace DrDax.RadioClient {
 				Description="Izslēgt skaņu"
 			};
 			this.TaskbarItemInfo.ThumbButtonInfos.Add(muteTaskBtn);
-			// Nodrošina izslēgtas skaņas ikonu uzdevumjoslā.
-			// http://blogs.msdn.com/llobo/archive/2007/03/05/listening-to-dependencyproperty-changes.aspx
-			DependencyPropertyDescriptor dpd=DependencyPropertyDescriptor.FromProperty(MediaElement.IsMutedProperty, typeof(MediaElement));
-			if (dpd != null)
-				dpd.AddValueChanged(Player, delegate {
-					this.TaskbarItemInfo.Overlay=Player.IsMuted ? mutedIcon:null;
-				});
 		}
 
-		private void VolumeCmdCanExecute(object sender, CanExecuteRoutedEventArgs e) {
+		private void Window_Loaded(object sender, RoutedEventArgs e) {
+			// http://blogs.msdn.com/nickkramer/archive/2006/03/18/554235.aspx
+			HwndSource.FromHwnd(new WindowInteropHelper(this).Handle).AddHook(new HwndSourceHook(WndProc)); // Lai varētu uztvert loga fokusu. GotFocus un LostFocus nelīdz.
+		}
+		private void VolumeCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
 			e.CanExecute=MuteBtn.IsEnabled;
 		}
 		/// <summary>Ieslēdz/izslēdz skaņu.</summary>
-		private void MuteCmdExecuted(object sender, ExecutedRoutedEventArgs e) {
+		private void MuteCmd_Executed(object sender, ExecutedRoutedEventArgs e) {
 			Player.IsMuted=!Player.IsMuted;
 			if (Player.IsMuted) {
 				muteTaskBtn.ImageSource=mutedIcon;
 				muteTaskBtn.Description="Ieslēgt skaņu";
+				this.TaskbarItemInfo.Overlay=mutedIcon;
 			} else {
 				muteTaskBtn.ImageSource=unmutedIcon;
 				muteTaskBtn.Description="Izslēgt skaņu";
+				this.TaskbarItemInfo.Overlay=null;
 			}
 		}
 		/// <summary>Palielina skaļumu.</summary>
-		private void IncreaseCmdExecuted(object sender, ExecutedRoutedEventArgs e) {
-			if (Player.Volume != 1) Player.Volume+=0.1;
+		private void IncreaseCmd_Executed(object sender, ExecutedRoutedEventArgs e) {
+			Player.Volume+=0.1;
+			if (Player.Volume > 1) Player.Volume=1;
 		}
 		/// <summary>Pamazina skaļumu.</summary>
-		private void DecreaseCmdExecuted(object sender, ExecutedRoutedEventArgs e) {
-			if (Player.Volume != 0) Player.Volume-=0.1;
+		private void DecreaseCmd_Executed(object sender, ExecutedRoutedEventArgs e) {
+			Player.Volume-=0.1;
+			if (Player.Volume < 0) Player.Volume=0;
 		}
 		private void MinimizeWindow(object sender, RoutedEventArgs e) {
 			this.WindowState=WindowState.Minimized;
