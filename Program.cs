@@ -72,8 +72,7 @@ namespace DrDax.RadioClient {
 						if (args.Length == 1) {
 							var radioSwitch=new ChannelFactory<IRadioSwitch>(new NetNamedPipeBinding(), RadioSwitch.ServiceUrl);
 							radioSwitch.CreateChannel().SetChannel(args[0]);
-						}
-						SetForegroundWindow(otherProcess.MainWindowHandle);
+						} else SetForegroundWindow(otherProcess.MainWindowHandle);
 						return;
 					}
 				}
@@ -105,8 +104,8 @@ namespace DrDax.RadioClient {
 					Settings.LastChannel=mainWindow.Channel.Url;
 					Settings.Save();
 				}
-			} catch (Exception ex) {
-				MessageBox.Show(ex.Message);
+			} catch (Exception ex) { // Visaptverošs kļūdu uztvērējs, lai problēmu gadījumā neparādītos Windows Error Reporting logs.
+				MessageBox.Show(ex.Message, "Kļūda radio darbībā", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
 

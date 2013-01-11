@@ -25,15 +25,11 @@ namespace DrDax.RadioClient {
 				channel=value;
 				if (channel != null) {
 					Title=channel.Caption;
-					MuteBtn.IsEnabled=true;
-					VolumeSlider.IsEnabled=true;
 					if (channel.Logo != null) ChannelLogo.Source=channel.Logo;
 					else ChannelLogo.Source=(BitmapImage)this.Resources["NoRadioLogo"];
 					Player.Source=new Uri(channel.Url);
 				} else {
 					Title="Nav raidstacijas";
-					MuteBtn.IsEnabled=false;
-					VolumeSlider.IsEnabled=false;
 					ChannelLogo.Source=(BitmapImage)this.Resources["NoRadioLogo"];
 					Player.Source=null;
 				}
@@ -61,11 +57,14 @@ namespace DrDax.RadioClient {
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e) {
+			IntPtr handle=new WindowInteropHelper(this).Handle;
+			// Ja nesagaidīja loga parādīšanos pēc programmas palaišanas.
+			if (GetForegroundWindow() != handle) TopBar.Background=inactiveBarBack;
 			// http://blogs.msdn.com/nickkramer/archive/2006/03/18/554235.aspx
-			HwndSource.FromHwnd(new WindowInteropHelper(this).Handle).AddHook(new HwndSourceHook(WndProc)); // Lai varētu uztvert loga fokusu. GotFocus un LostFocus nelīdz.
+			HwndSource.FromHwnd(handle).AddHook(new HwndSourceHook(WndProc)); // Lai varētu uztvert loga fokusu. GotFocus un LostFocus nelīdz.
 		}
 		private void VolumeCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
-			e.CanExecute=MuteBtn.IsEnabled;
+			e.CanExecute=Player.HasAudio;
 		}
 		/// <summary>Ieslēdz/izslēdz skaņu.</summary>
 		private void MuteCmd_Executed(object sender, ExecutedRoutedEventArgs e) {
@@ -114,5 +113,8 @@ namespace DrDax.RadioClient {
 			} 
 			return IntPtr.Zero;
 		}
+		[System.Runtime.InteropServices.DllImport("user32.dll")]
+		private static extern IntPtr GetForegroundWindow();
+
 	}
 }

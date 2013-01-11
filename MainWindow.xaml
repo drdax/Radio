@@ -17,7 +17,7 @@
 		</LinearGradientBrush>
 	</Window.Resources>
 	<Window.TaskbarItemInfo>
-		<!-- Sīktēla rādīs tika stacijas logotipu. -->
+		<!-- Sīktēlā rādīs tikai stacijas logotipu. -->
 		<TaskbarItemInfo ThumbnailClipMargin="0,20,0,20"/>
 	</Window.TaskbarItemInfo>
 	<Grid>
@@ -26,7 +26,8 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
-		<Border Background="{StaticResource ActiveBarBack}" x:Name="TopBar">
+		<MediaElement x:Name="Player" LoadedBehavior="Play" x:FieldModifier="private"/>
+		<Border x:Name="TopBar" Background="{StaticResource ActiveBarBack}" x:FieldModifier="private">
 			<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
@@ -34,7 +35,7 @@
 				<ColumnDefinition Width="20"/>
 			</Grid.ColumnDefinitions>
 			<TextBlock Text="{Binding Title, ElementName=win}" Margin="2" MouseLeftButtonDown="DragStart" Foreground="#33537C"/>
-			<Button Grid.Column="1" Click="MinimizeWindow" Foreground="#33537C" IsTabStop="False">
+			<Button Grid.Column="1" Click="MinimizeWindow" Foreground="#33537C" IsTabStop="False" ToolTip="Minimizēt" Focusable="False">
 				<Button.Style>
 					<Style TargetType="Button">
 						<Setter Property="Template">
@@ -61,7 +62,7 @@
 					</Style>
 				</Button.Style>
 			</Button>
-			<Button Grid.Column="2" Click="CloseWindow" Foreground="#33537C" IsTabStop="False">
+			<Button Grid.Column="2" Click="CloseWindow" Foreground="#33537C" IsTabStop="False" ToolTip="Aizvērt" Focusable="False">
 				<Button.Style>
 					<Style TargetType="Button">
 						<Setter Property="Template">
@@ -91,12 +92,11 @@
 		</Grid>
 		</Border>
 		<Border Grid.Row="1" MouseLeftButtonDown="DragStart" Background="#C6D9ED">
-			<Image x:Name="ChannelLogo" Stretch="None" Source="{StaticResource NoRadioLogo}"/>
+			<Image x:Name="ChannelLogo" Stretch="None" Source="{StaticResource NoRadioLogo}" x:FieldModifier="private"/>
 		</Border>
-		<MediaElement x:Name="Player" LoadedBehavior="Play"/>
 		<Border Grid.Row="2" Background="{Binding Background, ElementName=TopBar}">
 		<StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
-			<ToggleButton x:Name="MuteBtn" IsChecked="{Binding IsMuted, ElementName=Player}" Margin="0,0,2,0" Width="20">
+			<ToggleButton x:Name="MuteBtn" IsChecked="{Binding IsMuted, ElementName=Player, Mode=OneWay}" Command="MediaCommands.MuteVolume" Margin="0,0,2,0" Width="20" x:FieldModifier="private"><!-- lai komanda darbotos, Binding.Mode ir jābūt OneWay -->
 				<ToggleButton.Style>
 					<Style TargetType="ToggleButton">
 						<Setter Property="Template">
@@ -130,7 +130,7 @@
 			</ToggleButton>
 			<Grid Margin="2,0" Width="100" Height="16">
 				<Path Data="M0,1 L1,0 L1,1 Z" Stretch="Fill" Fill="#568CC6"/>
-				<Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Value="{Binding Volume, ElementName=Player}" SmallChange="0.01" LargeChange="0.1" ToolTip="Skaļums"/>
+				<Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Value="{Binding Volume, ElementName=Player}" SmallChange="0.01" LargeChange="0.1" ToolTip="Skaļums" x:FieldModifier="private" IsEnabled="{Binding IsEnabled, ElementName=MuteBtn}"/>
 			</Grid>
 		</StackPanel>
 		</Border>
