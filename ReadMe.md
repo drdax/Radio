@@ -5,7 +5,7 @@ Komplektā nāk visi Rīgas kanāli, BBC pamatkanāli, Itālijas (Rai), Krievija
 Noformējums iedvesmots ar VEF 202, kuru jaunībā mēdza klausīties autors. Kanālu izvēli noteica autora, viņa draugu un radu gaume, kā arī tieksme pēc pilnības.
 
 ## Klausītājiem ##
-**Uzstādīšanai** atpako `Radio2.zip` uz izvēlēto mapi, piemēram, `C:\Program Files\Radio`. Programmas darbība nebūs traucēta, ja mapē nebūs ieraksta tiesības. Komplekta sastāvs:
+**Uzstādīšanai** atpako [Radio2.zip](http://files.inbox.lv/ticket/3be68daadb16c95ddc2ed0fff6824a9490075e4f/Radio2.zip) uz izvēlēto mapi, piemēram, `C:\Program Files\Radio`. Programmas darbība nebūs traucēta, ja mapē nebūs ieraksta tiesības. Komplekta sastāvs:
 
 * Radio.exe – raidstaciju uztvērējs, šo failu vēlams piespraust uzdevumu joslai.
 * Radio.exe.config – sākotnējie iestatījumi. Iekļauts, lai zinātu, kā tos mainīt (ne visu iespējams veikt lietotāja saskarnē).
