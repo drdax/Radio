@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Radio BaseUrl="http://eu3.101.ru:8000/">
+	<Channels>
+		<!--<Channel Id="100" Url="v3_1"   Caption="Эфир Авторадио"/>-->
+		<Channel Id="1"   Url="c7_0"   Caption="Дискотека 80х"/>
+		<!--<Channel Id="2"   Url="c3_2"   Caption="Музыка Авторадио"/>
+		<Channel Id="3"   Url="c5_3"   Caption="Мурзилки Int."/>
+
+		<Channel Id="99"  Url="v1_1"   Caption="Эфир Радио ENERGY"/>
+		<Channel Id="74"  Url="c7_8"   Caption="NRJ 90's Dance"/>
+		<Channel Id="4"   Url="c16_11" Caption="NRJ Breakbeat"/>
+		<Channel Id="5"   Url="c4_2"   Caption="NRJ ClubDance"/>
+		<Channel Id="145" Url="c17_23" Caption="NRJ Dark Side Of D&amp;B"/>
+		<Channel Id="6"   Url="c12_3"  Caption="NRJ Drum &amp; Bass"/>
+		<Channel Id="136" Url="c15_24" Caption="NRJ DubStep"/>
+		<Channel Id="7"   Url="c6_3"   Caption="NRJ Electro"/>
+		<Channel Id="132" Url="c15_20" Caption="NRJ Electronic"/>
+		<Channel Id="8"   Url="c14_11" Caption="NRJ Gangsta &amp; Hip-Hop"/>
+		<Channel Id="9"   Url="c4_4"   Caption="NRJ Hot Traxx"/>
+		<Channel Id="10"  Url="c6_5"   Caption="NRJ House"/>
+		<Channel Id="11"  Url="c14_3"  Caption="NRJ In The Mix"/>
+		<Channel Id="152" Url="c7_19"  Caption="NRJ Indie World"/>
+		<Channel Id="127" Url="c14_23" Caption="NRJ Mash-Up"/>
+		<Channel Id="131" Url="c15_15" Caption="NRJ Minimal"/>
+		<Channel Id="151" Url="c7_20"  Caption="NRJ OldSchool Rave"/>
+		<Channel Id="13"  Url="c8_4"   Caption="NRJ Progressive"/>
+		<Channel Id="14"  Url="c16_22" Caption="NRJ Psy &amp; Goa Trance"/>
+		<Channel Id="12"  Url="c14_17" Caption="NRJ Pumping House"/>
+		<Channel Id="15"  Url="c4_3"   Caption="NRJ R'n'B"/>
+		<Channel Id="16"  Url="c11_1"  Caption="NRJ Rock"/>
+		<Channel Id="17"  Url="c4_6"   Caption="NRJ Russian Dance"/>
+		<Channel Id="18"  Url="c17_3"  Caption="NRJ Techno"/>
+		<Channel Id="19"  Url="c13_3"  Caption="NRJ Trance"/>
+
+		<Channel Id="102" Url="v5_1"   Caption="Эфир Юмор FM"/>
+		<Channel Id="20"  Url="c3_5"   Caption="Анекдоты"/>
+		<Channel Id="21"  Url="c4_1"   Caption="Классика Жанра"/>
+		<Channel Id="22"  Url="c2_4"   Caption="Юмор Non-Stop"/>
+
+		<Channel Id="101" Url="v4_1"   Caption="Эфир Радио Romantika"/>
+		<Channel Id="31"  Url="c2_3"   Caption="Romantika Cafe"/>
+		<Channel Id="68"  Url="c16_17" Caption="Romantika France"/>
+		<Channel Id="28"  Url="c11_4"  Caption="Romantika Instrumental"/>
+		<Channel Id="85"  Url="c10_5"  Caption="Romantika Jazz"/>
+		<Channel Id="29"  Url="c9_1"   Caption="Romantika Love Songs"/>
+		<Channel Id="120" Url="c7_14"  Caption="Romantika New Age"/>
+		<Channel Id="30"  Url="c2_1"   Caption="Romantika Office Lounge"/>
+		<Channel Id="64"  Url="c13_5"  Caption="Romantika Oldies"/>
+		<Channel Id="32"  Url="c17_2"  Caption="Romantika SPA"/>
+		<Channel Id="27"  Url="c14_13" Caption="Romantika Sex"/>
+
+		<Channel Id="23"  Url="c16_3"  Caption="Ambient"/>
+		<Channel Id="24"  Url="c15_3"  Caption="Chill Out"/>
+		<Channel Id="25"  Url="c2_2"   Caption="Cinema Music"/>
+		<Channel Id="26"  Url="c11_2"  Caption="Easy Listening"/>
+
+		<Channel Id="148" Url="c13_25" Caption="101 Fresh"/>
+		<Channel Id="35"  Url="c1_5"   Caption="Авторская Песня"/>
+		<Channel Id="36"  Url="c3_1"   Caption="ВИА"/>
+		<Channel Id="37"  Url="c7_6"   Caption="Военная Песня"/>
+		<Channel Id="144" Url="c7_17"  Caption="Дискотека СССР"/>
+		<Channel Id="38"  Url="c16_14" Caption="Духовная Музыка"/>
+		<Channel Id="49"  Url="c16_1"  Caption="Кабаре «Шансон»"/>
+		<Channel Id="39"  Url="c7_10"  Caption="Кавкаz Hits"/>
+		<Channel Id="155" Url="c16_28" Caption="Попса"/>
+		<Channel Id="33"  Url="c6_1"   Caption="Россия 90х"/>
+		<Channel Id="34"  Url="c4_5"   Caption="Россия Топ 50"/>
+		<Channel Id="40"  Url="c15_19" Caption="Русские Народные"/>
+		<Channel Id="41"  Url="c1_1"   Caption="Русские Песни"/>
+		<Channel Id="140" Url="c17_21" Caption="Русский Поп-Рок"/>
+		<Channel Id="42"  Url="c1_2"   Caption="Русский Рок"/>
+		<Channel Id="43"  Url="c1_3"   Caption="Русский Рэп"/>
+		<Channel Id="44"  Url="c14_4"  Caption="Русское Регги"/>
+		<Channel Id="46"  Url="c14_5"  Caption="СССР 30-50"/>
+		<Channel Id="47"  Url="c12_1"  Caption="СССР 50-70"/>
+		<Channel Id="45"  Url="c16_2"  Caption="Слезы Любви"/>
+		<Channel Id="48"  Url="c14_2"  Caption="Фабрика Звезд"/>
+		<Channel Id="50"  Url="c9_2"   Caption="Шансон"/>
+		<Channel Id="51"  Url="c9_3"   Caption="Этника"/>
+
+		<Channel Id="108" Url="c13_17" Caption="Arabiс Music"/>
+		<Channel Id="60"  Url="c10_1"  Caption="Armenia"/>
+		<Channel Id="82"  Url="c16_13" Caption="Euro Hits"/>
+		<Channel Id="65"  Url="c2_5"   Caption="Italia"/>
+		<Channel Id="62"  Url="c16_12" Caption="Japanese Music"/>
+		<Channel Id="63"  Url="c6_4"   Caption="Latino"/>
+		<Channel Id="147" Url="c17_25" Caption="Евровидение"/>
+		<Channel Id="67"  Url="c15_18" Caption="Музыка Востока"/>
+		<Channel Id="66"  Url="c12_4"  Caption="Украина"/>
+		<Channel Id="146" Url="c17_24" Caption="Французский Шансон"/>
+		<Channel Id="61"  Url="c15_17" Caption="Цыганская Музыка"/>
+
+		<Channel Id="160" Url="c7_21"  Caption="Tuborg Hits"/>
+		<Channel Id="81"  Url="c16_5"  Caption="Emo"/>
+		<Channel Id="69"  Url="c1_4"   Caption="Rock"/>
+		<Channel Id="70"  Url="c15_1"  Caption="Rock Guitar"/>
+		<Channel Id="71"  Url="c7_9"   Caption="Rock Remakes"/>
+		<Channel Id="89"  Url="c5_4"   Caption="Rock'n'Roll"/>
+		<Channel Id="72"  Url="c7_5"   Caption="Rock-Koleso"/>
+		<Channel Id="73"  Url="c8_3"   Caption="Thrash Zone"/>
+
+		<Channel Id="75"  Url="c6_2"   Caption="90's Gold"/>
+		<Channel Id="130" Url="c15_10" Caption="90's Pop"/>
+		<Channel Id="76"  Url="c5_2"   Caption="Blues"/>
+		<Channel Id="77"  Url="c17_4"  Caption="Cats &amp; Dogs"/>
+		<Channel Id="78"  Url="c14_1"  Caption="Country"/>
+		<Channel Id="79"  Url="c10_4"  Caption="Cyber Space"/>
+		<Channel Id="80"  Url="c17_5"  Caption="Disco"/>
+		<Channel Id="83"  Url="c12_2"  Caption="Experimental"/>
+		<Channel Id="84"  Url="c9_4"   Caption="Funk &amp; Soul"/>
+		<Channel Id="161" Url="c7_22"  Caption="Italo Disco"/>
+		<Channel Id="86"  Url="c15_5"  Caption="Live Hits"/>
+		<Channel Id="87"  Url="c7_2"   Caption="Mainstream"/>
+		<Channel Id="88"  Url="c5_5"   Caption="Reggae"/>
+		<Channel Id="90"  Url="c13_4"  Caption="Swing"/>
+		<Channel Id="91"  Url="c11_5"  Caption="Живые Концерты"/>
+		<Channel Id="92"  Url="c12_5"  Caption="Мюзиклы"/>
+
+		<Channel Id="93"  Url="c3_3"   Caption="Baby Box"/>
+		<Channel Id="94"  Url="c17_1"  Caption="Григорий Гладков"/>
+		<Channel Id="95"  Url="c8_1"   Caption="Колыбельная"/>
+
+		<Channel Id="97"  Url="c16_4"  Caption="Pop Classical Music"/>
+		<Channel Id="98"  Url="c7_1"   Caption="Spivakov Classic"/>
+		<Channel Id="96"  Url="c15_4"  Caption="Опера"/>
+
+		<Channel Id="104" Url="c13_13" Caption="ABBA"/>
+		<Channel Id="114" Url="c7_11"  Caption="Boney M."/>
+		<Channel Id="125" Url="c14_21" Caption="Deep Purple"/>
+		<Channel Id="105" Url="c13_14" Caption="Depeche Mode"/>
+		<Channel Id="142" Url="c17_22" Caption="Elton John"/>
+		<Channel Id="111" Url="c13_20" Caption="Elvis Presley"/>
+		<Channel Id="149" Url="c7_18"  Caption="Linkin Park"/>
+		<Channel Id="128" Url="c14_24" Caption="Madonna"/>
+		<Channel Id="123" Url="c14_20" Caption="Metallica"/>
+		<Channel Id="52"  Url="c10_2"  Caption="Michael Jackson"/>
+		<Channel Id="115" Url="c7_12"  Caption="Modern Talking"/>
+		<Channel Id="53"  Url="c8_2"   Caption="Pink Floyd"/>
+		<Channel Id="54"  Url="c13_1"  Caption="Queen"/>
+		<Channel Id="138" Url="c16_19" Caption="Robbie Williams"/>
+		<Channel Id="113" Url="c13_22" Caption="Scorpions"/>
+		<Channel Id="55"  Url="c10_3"  Caption="The Beatles"/>
+		<Channel Id="117" Url="c13_24" Caption="The Rolling Stones"/>
+		<Channel Id="109" Url="c13_18" Caption="U2"/>
+		<Channel Id="139" Url="c17_20" Caption="Агата Кристи"/>
+		<Channel Id="153" Url="c16_26" Caption="Александр Розенбаум"/>
+		<Channel Id="137" Url="c15_25" Caption="Алиса"/>
+		<Channel Id="56"  Url="c3_4"   Caption="Алла"/>
+		<Channel Id="118" Url="c7_13"  Caption="Ария"/>
+		<Channel Id="57"  Url="c16_15" Caption="БГ &amp; Аквариум"/>
+		<Channel Id="135" Url="c15_23" Caption="БИ-2"/>
+		<Channel Id="58"  Url="c11_3"  Caption="Высоцкий"/>
+		<Channel Id="112" Url="c13_21" Caption="ДДТ"/>
+		<Channel Id="121" Url="c14_19" Caption="Каста"/>
+		<Channel Id="133" Url="c15_21" Caption="Ленинград"/>
+		<Channel Id="158" Url="c16_31" Caption="Любэ"/>
+		<Channel Id="59"  Url="c7_7"   Caption="Машина Времени"/>
+		<Channel Id="119" Url="c14_18" Caption="Мир Ласкового Мая"/>
+		<Channel Id="110" Url="c13_19" Caption="Михаил Круг"/>
+		<Channel Id="156" Url="c16_29" Caption="Муслим Магомаев"/>
+		<Channel Id="126" Url="c14_22" Caption="Наутилус Помпилиус"/>
+		<Channel Id="157" Url="c16_30" Caption="Пикник"/>
+		<Channel Id="122" Url="c7_15"  Caption="Сектор Газа"/>
+		<Channel Id="129" Url="c14_25" Caption="Сплин"/>
+		<Channel Id="154" Url="c16_27" Caption="Стас Михайлов"/>
+		<Channel Id="116" Url="c13_23" Caption="Филипп Киркоров"/>
+		<Channel Id="103" Url="c13_12" Caption="Цой и группа «КИНО»"/>
+		<Channel Id="106" Url="c13_15" Caption="Чайф"/>-->
+	</Channels>
+</Radio>

@@ -1,0 +1,12 @@
+﻿<Application x:Class="DrDax.RadioClient.RadioApp" x:ClassModifier="internal"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+	<Application.Resources>
+		<BitmapImage x:Key="RadioLogo" UriSource="Radio.png" po:Freeze="True"/>
+		<LinearGradientBrush x:Key="InactiveCaptionBackground" StartPoint="0,0" EndPoint="0,1" po:Freeze="True">
+			<GradientStop Offset="0" Color="{x:Static SystemColors.InactiveCaptionColor}"/>
+			<GradientStop Offset="1" Color="{x:Static SystemColors.GradientInactiveCaptionColor}"/>
+		</LinearGradientBrush>
+	</Application.Resources>
+</Application>

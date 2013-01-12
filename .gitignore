@@ -1,0 +1,8 @@
+bin/
+obj/
+*.suo
+*.user
+
+.nuget/
+!.nuget/NuGet.config
+!.nuget/NuGet.targets
