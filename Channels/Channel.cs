@@ -61,25 +61,26 @@ namespace DrDax.RadioClient {
 		/// Vai skaņa ir izslēgta (<c>true</c>) vai ieslēgta (<c>false</c>).
 		/// </summary>
 		public bool IsMuted {
-			get { return GetIsMuted(); }
+			get { // MmsChannel pēc apstāšanās nepareizi atgriež klusuma stāvokli, tāpēc vadās pēc stoppedByTimer.
+				return stoppedByTimer || GetIsMuted();
+			}
 			set {
-				if (value != GetIsMuted() || stoppedByTimer) { // Pēc taimera klusums atskaņotājā neatbilst ārējam.
-					if (stoppedByTimer) {
-						stoppedByTimer=false;
-						Play();
-					} else if (value) {
+				if (value != IsMuted) {
+					if (value) {
 						if (muteTimer == null) {
 							muteTimer=new Timer(DefaultTimeout);
 							muteTimer.Elapsed+=muteTimer_Elapsed;
 							muteTimer.AutoReset=true;
 						}
 						muteTimer.Start();
-						stoppedByTimer=false;
-						SetIsMuted(true);
 					} else {
+						if (stoppedByTimer) {
+							stoppedByTimer=false;
+							Play();
+						}
 						if (muteTimer != null) muteTimer.Stop();
-						SetIsMuted(false);
 					}
+					SetIsMuted(value);
 					NotifiyPropertyChanged("IsMuted");
 				}
 			}

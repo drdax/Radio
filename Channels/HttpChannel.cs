@@ -148,7 +148,10 @@ namespace DrDax.RadioClient {
 				try {
 					frame=Mp3Frame.LoadFromStream(mp3Stream);
 				} catch (EndOfStreamException) { fullyDownloaded=true; break; }
-				catch (Exception) { hasException=true; break; } // Noraujās arī ja izsauc request.Abort()
+				catch (Exception) {
+					hasException=PlaybackState != PlaybackState.Stopped;  // Stopped jābūt, ja izsauca request.Abort().
+					break;
+				}
 				if (decompressor == null) {
 					Debug.WriteLine("{0} Hz, {1} bps, {2} bytes", frame.SampleRate, frame.BitRate, frame.FrameLength);
 					// Sagatavo dekoderi saskaņā ar pirmā skaņas fragmenta īpatnībām.
