@@ -5,7 +5,7 @@ Komplektā nāk visi Rīgas kanāli, BBC pamatkanāli, Itālijas (Rai), Krievija
 Noformējums iedvesmots ar VEF 202, kuru jaunībā mēdza klausīties autors. Kanālu izvēli noteica autora, viņa draugu un radu gaume, kā arī tieksme pēc pilnības.
 
 ## Klausītājiem ##
-**Uzstādīšanai** atpako [Radio2.zip](http://files.inbox.lv/ticket/3be68daadb16c95ddc2ed0fff6824a9490075e4f/Radio2.zip) uz izvēlēto mapi, piemēram, `C:\Program Files\Radio`. Programmas darbība nebūs traucēta, ja mapē nebūs ieraksta tiesības. Komplekta sastāvs:
+**Uzstādīšanai** atpako [Radio2.zip](https://dl.dropbox.com/s/lmi0bxdamv502fo/Radio2.zip) uz izvēlēto mapi, piemēram, `C:\Program Files\Radio`. Programmas darbība nebūs traucēta, ja mapē nebūs ieraksta tiesības. Komplekta sastāvs:
 
 * Radio.exe – raidstaciju uztvērējs, šo failu vēlams piespraust uzdevumu joslai.
 * Radio.exe.config – sākotnējie iestatījumi. Iekļauts, lai zinātu, kā tos mainīt (ne visu iespējams veikt lietotāja saskarnē).
@@ -17,7 +17,7 @@ Noformējums iedvesmots ar VEF 202, kuru jaunībā mēdza klausīties autors. Ka
 Darbībai nepieciešams .NET Framework 4.0 Client Profile, Windows versija sākot ar XP, der arī Server paveidi.
 Zem Windows 7 un 8 pirmo reizi palaižot programmu no pieejamiem kanāliem tiek izveidots saīšņu saraksts. Iepriekšējo operētājsistēmu lietotājiem nāksies parūpēties par saīsnēm uz mīļotajām stacijām pašiem, piemēram, `Radio.exe retro.3` ieslēdz Ретро FM Rīgas versiju.
 
-Ja palaišanas brīdī parādās ugunsmūra brīdinājums, tad Radio.exe ir aizliedzami ienākošie savienojumi (jo tādi nav paredzēti) un atļaujami izejošie.
+Ja palaišanas brīdī parādās ugunsmūra brīdinājums, tad Radio.exe ir aizliedzami ienākošie savienojumi (tādi nav paredzēti, izņemot kanālu pārslēgšanas komandas) un atļaujami izejošie.
 Pēdējais atskaņotais kanāls tiek iegaumēts, tāpēc nākošajā reizē var laist, nelietojot saīšņu sarakstu.
 Saīšņu saraksts ir tīrāms ar operētājsistēmas standartlīdzekļiem (kontekstizvēlnē nospiežot *Noņemt no šī saraksta*), tad nevēlamie kanāli tiks saglabāti konfigurācijas failā.
 

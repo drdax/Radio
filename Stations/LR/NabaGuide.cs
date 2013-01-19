@@ -24,9 +24,10 @@ namespace LR {
 			string description,
 				caption=client.DownloadString("http://www.naba.lv/naba_skan.php?act=skan&_="+DateTime.UtcNow.Ticks).SplitCaption(out description, "&#160;-&#160;"); // Izpildītājs - dziesma (latīņu burtiem).
 			// act=time 14:19 (reiz desmit sekundēs), act=prog Mūzika (UTF8, reizi trijās minūtēs)
-			if (caption == "\n") // Ja dziesmai nav norādīts nosaukums, tad paņem raidījuma nosaukumu.
+			if (description == "\n") { // Ja dziesmai nav norādīts nosaukums un izpildītājs, tad paņem raidījuma nosaukumu.
 				caption=client.DownloadString("http://www.naba.lv/naba_skan.php?act=prog");
-			else if (caption.IndexOf('<') == 0) caption=htmlRx.Replace(caption, string.Empty); // Atstāj tikai tekstu: <a href="raidijumi/bistamie-gadi/" title="Bīstamie gadi" >Bīstamie gadi</a>
+				description=null;
+			} else if (caption.IndexOf('<') == 0) caption=htmlRx.Replace(caption, string.Empty); // Atstāj tikai tekstu: <a href="raidijumi/bistamie-gadi/" title="Bīstamie gadi" >Bīstamie gadi</a>
 			if (CurrentBroadcast == null || CurrentBroadcast.Caption != caption) {
 				PreviousBroadcast=CurrentBroadcast;
 				if (description == null) description=listedGuide.CurrentBroadcast.Caption;
@@ -52,7 +53,7 @@ namespace LR {
 				using (var client=new ProperWebClient()) {
 					foreach (Match match in guideRx.Matches(client.DownloadString(
 						string.Format("http://www.naba.lv/programma/diena/?tx_cal_controller%5Byear%5D={0}&tx_cal_controller%5Bmonth%5D={1:00}&tx_cal_controller%5Bday%5D={2:00}", date.Year, date.Month, date.Day))))
-						AddBroadcast(date.AddHours(int.Parse(match.Groups["hours"].Value)).AddMinutes(int.Parse(match.Groups["minutes"].Value)), match.Groups["caption"].Value);
+						AddBroadcast(date.AddHours(int.Parse(match.Groups["hours"].Value)).AddMinutes(int.Parse(match.Groups["minutes"].Value)), System.Net.WebUtility.HtmlDecode(match.Groups["caption"].Value));
 				}
 			}
 		}

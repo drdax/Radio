@@ -25,6 +25,10 @@ namespace DrDax.RadioClient {
 		/// <summary>Vai pašlaik rāda dialoglogu pa virsu programmas logam.</summary>
 		/// <remarks>Ieviests, lai kļūdas paziņojumi varētu saņemt fokusu.</remarks>
 		public static bool ShowingDialog=false;
+		/// <summary>
+		/// Vai lietotājs ir dzēsis kanālus no saīšņu saraksta iepriekšējā programmas darbības reizē.
+		/// </summary>
+		private bool hasRemovedJumpItems=false;
 
 		public RadioApp(Dictionary<string, Station> stations) {
 			Stations=stations;
@@ -52,6 +56,7 @@ namespace DrDax.RadioClient {
 					IconResourceIndex=c.Value.Item2
 				});
 			jumps.Apply();
+			if (hasRemovedJumpItems) Settings.Default.Save(); // Iegaumē klausītāja izvēli.
 
 			// Palaiž raidstaciju pārslēgšanas pakalpojumu.
 			switchService=new ServiceHost(typeof(RadioSwitch), new Uri(RadioSwitch.ServiceUrl));
@@ -68,6 +73,7 @@ namespace DrDax.RadioClient {
 			if (Settings.Default.IgnoredChannels.Length == 0)
 				Settings.Default.IgnoredChannels=removedChannels;
 			else Settings.Default.IgnoredChannels+=ChannelSeparator+removedChannels;
+			hasRemovedJumpItems=true;
 		}
 
 		/// <summary>Atgriež kanālu pēc tā identifikatora.</summary>

@@ -29,7 +29,7 @@ namespace Riga {
 						description=sb.ToString();
 					}
 					AddBroadcast(date.Add(TimeSpan.Parse(match.Groups["time"].Value)), // HH:mm
-						match.Groups["caption"].Value.Trim(), description);
+						System.Net.WebUtility.HtmlDecode(match.Groups["caption"].Value.Trim()), description);
 				}
 			}
 		}
