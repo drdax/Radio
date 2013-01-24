@@ -24,17 +24,14 @@ namespace Rai {
 		protected override void UpdateBroadcasts() {
 			try { // Var gadīties tukša lapa.
 				// XML tiek pārkodēts uz JSON un tad atpakaļ, bet veids, kā nokļūt pie oriģinālā XML nav noskaidrots (guideUrl iekļautā adrese pa tiešo neveras).
-				XElement json=XElement.Load(JsonReaderWriterFactory.CreateJsonReader(
-					// Tāda ņemšanās ar parkodēšanu, jo JSON lasītājs atbalsta tikai Unicode paveidus.
-					Encoding.UTF8.GetBytes(client.DownloadString(guideUrl)),
-					XmlDictionaryReaderQuotas.Max));
+				XElement json=XElement.Load(JsonReaderWriterFactory.CreateJsonReader(client.DownloadData(guideUrl), XmlDictionaryReaderQuotas.Max));
 				System.Diagnostics.Debug.WriteLine(json.ToString());
 				XElement guide=json.Element("xml").Element("radio");
 				DateTime now=DateTime.Now;
-				Broadcast current=CurrentBroadcast;
-				CurrentBroadcast=GetBroadcast(now, now.AddSeconds(TimerTimeout), guide.Element("now_playing"));
-				if (current == null || current.Caption != CurrentBroadcast.Caption) {
-					PreviousBroadcast=current;
+				Broadcast current=GetBroadcast(now, now.AddSeconds(TimerTimeout), guide.Element("now_playing"));
+				if (CurrentBroadcast == null || current.Caption != CurrentBroadcast.Caption) {
+					PreviousBroadcast=CurrentBroadcast;
+					CurrentBroadcast=current;
 					NextBroadcast=GetBroadcast(now.AddSeconds(TimerTimeout), now.AddSeconds(TimerTimeout*2), guide.Element("next_event").Element("item"));
 				}
 			} catch { CurrentBroadcast=null; NextBroadcast=null; }

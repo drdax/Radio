@@ -10,6 +10,7 @@ namespace DrDax.RadioClient {
 	public static class Program {
 		[STAThread]
 		public static void Main(string[] args) {
+			MainWindow mainWindow=null;
 		#if !DEBUG
 			try {
 		#endif
@@ -49,7 +50,7 @@ namespace DrDax.RadioClient {
 						settings.ChannelId=null;
 					}
 				}
-				var mainWindow=new MainWindow {
+				mainWindow=new MainWindow {
 					Channel=channel // Jāiestata pat ja null.
 				};
 				app.Run(mainWindow);
@@ -62,7 +63,14 @@ namespace DrDax.RadioClient {
 					settings.Save();
 				}
 			} catch (Exception ex) { // Visaptverošs kļūdu uztvērējs, lai problēmu gadījumā neparādītos Windows Error Reporting logs.
-			   RadioApp.ShowError(ex.Message, "Kļūda radio darbībā");
+				RadioApp.ShowError(ex.Message, "Kļūda radio darbībā");
+				try {
+					if (mainWindow != null && mainWindow.Channel != null) mainWindow.Channel.Stop(); // Fona procesu likvidācijai.
+					System.IO.File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+						string.Format("Radio Exception {0:yyyy-dd-MM HH-mm-ss}.txt", DateTime.UtcNow)),
+						(args.Length == 0 ? "Bez argumentiem":args[0])+Environment.NewLine+ex.ToString());
+
+				} catch {}
 			}
 		#endif
 		}

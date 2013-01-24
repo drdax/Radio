@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="RetroGuide.cs" />
     <Compile Include="RetroRuGuide.cs" />
     <Compile Include="RetroStation.cs" />
     <Compile Include="RetroUaGuide.cs" />
