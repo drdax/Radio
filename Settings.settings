@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DrDax.RadioClient" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ChannelId" Description="Pēdējā atskaņotā kanāla identifikators, piemēram, retro.3" GenerateDefaultValueInCode="false" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Volume" Description="Skaļums no 0 (pilnīgs klusums) līdz 1 (maksimums)." Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="MuteOnLock" Description="Vai atslēgt skaņu, kad lietotājs bloķē darbstaciju." Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="IgnoredChannels" Description="Kanālu identifikatori, kurus nerāda pārslēgšanas sarakstā. Atdalīti ar tukšumu." Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UseSystemProxy" Description="Vai HTTP kanālam un raidījumu sarakstu izgūšanai jālieto sistēmā noteiktais starpniekserveris (tas pats, kuru izmanto Internet Explorer)." Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UseGuide" Description="Vai izgūt un attēlot raidījumu sarakstu." Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShowClock" Description="Vai rādīt laiku studijā." Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

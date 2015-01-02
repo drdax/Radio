@@ -14,6 +14,7 @@ namespace DrDax.RadioClient {
 		private readonly Brush captionBackground;
 		private readonly Brush logoBackground;
 		private readonly Brush guideBackground;
+		private readonly SolidColorBrush windowBorder;
 		private bool focused=true;
 
 		/// <summary>
@@ -36,6 +37,10 @@ namespace DrDax.RadioClient {
 		public Brush LogoBackground { get { return logoBackground; } }
 		/// <summary>Raidījumu saraksta fons.</summary>
 		public Brush GuideBackground { get { return guideBackground; } }
+		/// <summary>Loga rāmja krāsa.</summary>
+		public SolidColorBrush WindowBorder {
+			get { return focused?windowBorder:SystemColors.InactiveBorderBrush; }
+		}
 		/// <summary>
 		/// Vai programmas logs ir fokusā. Iestata, lai loga virsraksts izskatītos atbilstoši stāvoklim.
 		/// </summary>
@@ -45,6 +50,7 @@ namespace DrDax.RadioClient {
 				if (PropertyChanged != null) {
 					PropertyChanged(this, new PropertyChangedEventArgs("CaptionForeground"));
 					PropertyChanged(this, new PropertyChangedEventArgs("CaptionBackground"));
+					PropertyChanged(this, new PropertyChangedEventArgs("WindowBorder"));
 				}
 			}
 		}
@@ -54,7 +60,7 @@ namespace DrDax.RadioClient {
 		/// Lai lietotu vienu bildi visai kopējai ekrāna daļai,
 		/// to jāpadod kā <paramref name="logoBackground"/>, bet <paramref name="guideBackground"/> jābūt <c>null</c>.
 		/// </remarks>
-		public Brand(Color textColor, Color statusColor, Color captionTextColor,
+		public Brand(Color textColor, Color statusColor, Color captionTextColor, Color windowBorderColor,
 			Brush captionBackground, Brush logoBackground, Brush guideBackground=null) {
 			if (textColor == null || statusColor == null || captionBackground == null) throw new ArgumentNullException("Kāda krāsa nav norādīta");
 			if (captionBackground == null || logoBackground == null) throw new ArgumentNullException("Kāda ota nav norādīta");
@@ -64,24 +70,24 @@ namespace DrDax.RadioClient {
 				guideBackground.Freeze(); HasSharedBackground=false;
 			}
 			textForeground=new SolidColorBrush(textColor); statusForeground=new SolidColorBrush(statusColor);
-			captionForeground=new SolidColorBrush(captionTextColor);
+			captionForeground=new SolidColorBrush(captionTextColor); windowBorder=new SolidColorBrush(windowBorderColor);
 			this.captionBackground=captionBackground; this.logoBackground=logoBackground; this.guideBackground=guideBackground;
 			// Iesaldē otas labākai veiktspējai. To animācija pēc šī soļa nav iespējama.
 			textForeground.Freeze(); statusForeground.Freeze(); captionForeground.Freeze();
-			captionBackground.Freeze(); logoBackground.Freeze();
+			windowBorder.Freeze(); captionBackground.Freeze(); logoBackground.Freeze();
 		}
 		/// <summary>Noformējums ar blīvām krāsām, izņemot gradienta virsrakstu.</summary>
-		public Brand(Color textColor, Color progressColor, Color captionTextColor,
+		public Brand(Color textColor, Color statusColor, Color captionTextColor, Color windowBorderColor,
 			Color captionBackgroundStartColor, Color captionBackgroundEndColor,
 			Color logoBackgroundColor, Color guideBackgroundColor) :
-			this(textColor, progressColor, captionTextColor,
+			this(textColor, statusColor, captionTextColor, windowBorderColor,
 				new LinearGradientBrush(captionBackgroundStartColor, captionBackgroundEndColor, 90),
 				new SolidColorBrush(logoBackgroundColor),
 				guideBackgroundColor == logoBackgroundColor ? null:new SolidColorBrush(guideBackgroundColor)) {}
 		/// <summary>Noformējums ar blīvām krāsām.</summary>
-		public Brand(Color textColor, Color progressColor, Color captionTextColor,
+		public Brand(Color textColor, Color progressColor, Color captionTextColor, Color windowBorderColor,
 			Color captionBackgroundColor, Color logoBackgroundColor, Color guideBackgroundColor) :
-			this(textColor, progressColor, captionTextColor,
+			this(textColor, progressColor, captionTextColor, windowBorderColor,
 				new SolidColorBrush(captionBackgroundColor), new SolidColorBrush(logoBackgroundColor),
 				guideBackgroundColor == logoBackgroundColor ? null:new SolidColorBrush(guideBackgroundColor)) {}
 

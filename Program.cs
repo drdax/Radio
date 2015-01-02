@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Registration;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.ServiceModel;
-using DrDax.RadioClient.Properties;
 
 namespace DrDax.RadioClient {
-	public static class Program {
+	internal partial class RadioApp {
 		[STAThread]
 		public static void Main(string[] args) {
 			MainWindow mainWindow=null;
@@ -30,7 +30,8 @@ namespace DrDax.RadioClient {
 				}
 
 				// Ielādē visas stacijas no programmas mapes un XML faila staciju.
-				var container=new CompositionContainer(new AggregateCatalog(new DirectoryCatalog(".", "*.Station.dll"), new TypeCatalog(typeof(RadioXmlStation))));
+				var registration=new RegistrationBuilder(); registration.ForTypesDerivedFrom<Station>().Export<Station>();
+				var container=new CompositionContainer(new AggregateCatalog(new DirectoryCatalog(".", "*.Station.dll", registration), new TypeCatalog(typeof(RadioXmlStation))));
 				// ! Pašlaik drīkst būt tikai viena stacijas klase katrā DLLā.
 				var app=new RadioApp(container.GetExportedValues<Station>().ToDictionary(s => {
 					string name=s.GetType().Assembly.GetName().Name.ToLower();
@@ -50,33 +51,40 @@ namespace DrDax.RadioClient {
 						settings.ChannelId=null;
 					}
 				}
-				mainWindow=new MainWindow {
-					Channel=channel // Jāiestata pat ja null.
-				};
+				mainWindow=new MainWindow(channel);
 				app.Run(mainWindow);
 
-		#if !DEBUG
-				// Saglabā pēdējo klausīto kanālu.
 				if (!(mainWindow.Channel is EmptyChannel)) {
+		#if !DEBUG
+					// Saglabā pēdējo klausīto kanālu.
 					settings.ChannelId=mainWindow.Channel.Id;
 					settings.Volume=mainWindow.Channel.Volume;
-					settings.Save();
+		#endif
+					mainWindow.Channel.Dispose();
 				}
+		#if !DEBUG
+				bool saved=false;
+				foreach (var station in app.Stations.Values)
+					if (station.HasSettingsChanges) {
+						station.SaveSettings();
+						saved=true;
+					}
+				if (!saved && settings.HasChanges) settings.Save();
 			} catch (Exception ex) { // Visaptverošs kļūdu uztvērējs, lai problēmu gadījumā neparādītos Windows Error Reporting logs.
+				string channelId;
+				if (mainWindow != null && mainWindow.Channel != null) {
+					channelId=mainWindow.Channel.Id;
+					try {
+						mainWindow.Channel.Stop(); // Fona procesu likvidācijai.
+					} catch {}
+				} else channelId=null;
+				if (!(ex is ChannelNotFoundException)) RadioApp.LogError(ex, channelId);
 				RadioApp.ShowError(ex.Message, "Kļūda radio darbībā");
-				try {
-					if (mainWindow != null && mainWindow.Channel != null) mainWindow.Channel.Stop(); // Fona procesu likvidācijai.
-					System.IO.File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-						string.Format("Radio Exception {0:yyyy-dd-MM HH-mm-ss}.txt", DateTime.UtcNow)),
-						(args.Length == 0 ? "Bez argumentiem":args[0])+Environment.NewLine+ex.ToString());
-
-				} catch {}
 			}
 		#endif
 		}
 
 		[DllImport("user32.dll")]
-		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 }

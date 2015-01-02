@@ -16,9 +16,9 @@ namespace DrDax.RadioClient {
 			if (radioDoc != null) {
 				byte k=0;
 				foreach (var channelX in radioDoc.Descendants("Channel")) {
-					byte number;
+					uint number;
 					// Kanālam drīkst būt identificējošais numurs. Ja tāda nav, tad ņem skaitli pēc kārtas.
-					if (channelX.Attribute("Id") == null || !byte.TryParse(channelX.Attribute("Id").Value, out number))
+					if (channelX.Attribute("Id") == null || !uint.TryParse(channelX.Attribute("Id").Value, out number))
 						number=k++;
 					Channels.Add(number, channelX.Attribute("Caption").Value);
 				}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace DrDax.RadioClient {
@@ -7,24 +8,26 @@ namespace DrDax.RadioClient {
 		/// <summary>Taimers, pēc kura iztecēšanas nomainās pašreizējais raidījums.</summary>
 		private readonly Timer guideTimer=new Timer();
 
-		public override bool HasKnownDuration { get { return true; } }
-
 		/// <summary>Nomaina aktuālos raidījumus.</summary>
-		protected abstract void UpdateBroadcasts();
+		protected abstract Task UpdateBroadcasts();
 
-		/// <summary>
-		/// Palaiž raidījumu saraksta izgūšanas taimeri. Šī metode jāizsauc pareizā brīdī konstruktorā.
-		/// </summary>
-		protected void StartTimer() {
-			guideTimer.AutoReset=true;
-			guideTimer.Elapsed+=guideTimer_Elapsed;
-			UpdateBroadcasts();
+		public override async Task Start(bool initialize) {
+			await UpdateBroadcasts();
 			guideTimer.Interval=CurrentBroadcast == null ?
 				Channel.DefaultTimeout : (CurrentBroadcast.EndTime-DateTime.Now).TotalMilliseconds;
 			guideTimer.Start();
 		}
-		private void guideTimer_Elapsed(object sender, ElapsedEventArgs e) {
-			UpdateBroadcasts();
+		public override void Stop() {
+			base.Stop();
+			guideTimer.Stop();
+		}
+
+		protected TimedGuide(Menu<Guide> menu) : base(menu, true, false) {
+			guideTimer.AutoReset=true;
+			guideTimer.Elapsed+=guideTimer_Elapsed;
+		}
+		private async void guideTimer_Elapsed(object sender, ElapsedEventArgs e) {
+			await UpdateBroadcasts();
 			guideTimer.Interval=CurrentBroadcast == null ?
 				Channel.DefaultTimeout : (CurrentBroadcast.EndTime-DateTime.Now).TotalMilliseconds;
 		}

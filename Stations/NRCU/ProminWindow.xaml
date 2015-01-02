@@ -1,0 +1,9 @@
+﻿<r:StudioWindowBase x:Class="Nrcu.ProminWindow"
+   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:r="clr-namespace:DrDax.RadioClient;assembly=Radio">
+	<Grid>
+		<Image x:Name="image1" x:FieldModifier="private"/>
+		<Image x:Name="image2" x:FieldModifier="private" Visibility="Hidden"/>
+	</Grid>
+</r:StudioWindowBase>

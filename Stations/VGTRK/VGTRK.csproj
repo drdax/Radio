@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{E8DC2B1A-63BB-499A-BA34-D146CCFC893A}</ProjectGuid>
+    <RootNamespace>Vgtrk</RootNamespace>
+    <Win32Resource>VGTRK.res</Win32Resource>
+  </PropertyGroup>
+  <Import Project="..\Station.targets" />
+	<ItemGroup>
+	  <Reference Include="System.Xml" />
+	  <Reference Include="System.Xml.Linq" />
+	</ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="MayakGuide.cs" />
+    <Compile Include="MayakMenu.cs" />
+    <Compile Include="RusGuide.cs" />
+    <Compile Include="VestiGuide.cs" />
+    <Compile Include="VgtrkStation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VGTRK.res" />
+    <Resource Include="Mayak.png" />
+    <Resource Include="RadioRus.png" />
+    <Resource Include="RadioCult.png" />
+    <Resource Include="Unost.png" />
+    <Resource Include="Vesti.png" />
+  </ItemGroup>
+</Project>

@@ -41,7 +41,7 @@ namespace DrDax.RadioClient {
 		/// </summary>
 		/// <remarks>Šo metodi jāizsauc vienreiz katrai <see cref="HttpWebRequest"/> instancei.</remarks>
 		public static void ApplyProxy(this HttpWebRequest request) {
-			if (!Properties.Settings.Default.UseSystemProxy) request.Proxy=null;
+			if (!Settings.Default.UseSystemProxy) request.Proxy=null;
 		}
 		/// <param name="hexColor">Krāsas kods, piemēram, 0xFF008C.</param>
 		/// <returns>Krāsa pēc tās RGB HEX koda.</returns>

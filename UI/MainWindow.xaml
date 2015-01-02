@@ -1,0 +1,270 @@
+﻿<Window x:Class="DrDax.RadioClient.MainWindow" x:ClassModifier="internal"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+	xmlns:l="clr-namespace:DrDax.RadioClient"
+	Title="Radio" Width="446" Height="216" ResizeMode="CanMinimize" WindowStyle="None" Foreground="{Binding Brand.TextForeground}"
+	d:DataContext="{d:DesignInstance l:EmptyChannel, IsDesignTimeCreatable=True}">
+	<Window.Resources>
+		<BitmapImage x:Key="MutedIcon" UriSource="..\Unmute.png"/>
+		<BitmapImage x:Key="UnmutedIcon" UriSource="..\Mute.png"/>
+		<BitmapImage x:Key="CopyIcon" UriSource="..\Copy.png"/>
+		<SolidColorBrush x:Key="WarningBrush" Color="#FF2300" po:Freeze="True"/>
+		<SolidColorBrush x:Key="ButtonBackground" Color="#80F0F0F0" po:Freeze="True"/>
+		<Style x:Key="CaptionTooltip" TargetType="ToolTip">
+			<Setter Property="Placement" Value="Relative"/>
+			<Setter Property="Height" Value="20"/>
+			<Setter Property="HorizontalOffset" Value="-3"/>
+			<Setter Property="VerticalOffset" Value="-1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ToolTip">
+						<Border Background="{x:Static SystemColors.InfoBrush}" BorderThickness="1" BorderBrush="{x:Static SystemColors.WindowFrameBrush}">
+							<TextBlock Text="{TemplateBinding Content}" Foreground="{x:Static SystemColors.InfoTextBrush}" Margin="2,1"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="DescriptionTooltip" TargetType="ToolTip">
+			<Setter Property="Placement" Value="Relative"/>
+			<Setter Property="Width" Value="240"/>
+			<Setter Property="HorizontalOffset" Value="-1"/>
+			<Setter Property="VerticalOffset" Value="-1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ToolTip">
+						<Border Background="{x:Static SystemColors.InfoBrush}" BorderThickness="1" BorderBrush="{x:Static SystemColors.WindowFrameBrush}">
+							<TextBlock Text="{TemplateBinding Content}" Foreground="{x:Static SystemColors.InfoTextBrush}" Margin="2,1" TextWrapping="Wrap"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<!-- Kontekstizvēlnes teksta elementiem. Nav iespējams vienlaicīgi lietot Tooltip vienam, bet izvēlni citam elementam. -->
+		<ContextMenu x:Key="PreviousBroadcastMenu">
+			<MenuItem Click="CopyPreviousBroadcastData" Header="Kopēt iepriekšējo raidījumu" InputGestureText="X">
+				<MenuItem.Icon><Image Source="{StaticResource CopyIcon}"/></MenuItem.Icon>
+			</MenuItem>
+		</ContextMenu>
+		<ContextMenu x:Key="CurrentBroadcastMenu">
+			<MenuItem Click="CopyCurrentBroadcastData" Header="Kopēt pašreizējo raidījumu" InputGestureText="C">
+				<MenuItem.Icon><Image Source="{StaticResource CopyIcon}"/></MenuItem.Icon>
+			</MenuItem>
+		</ContextMenu>
+	</Window.Resources>
+	<Window.TaskbarItemInfo>
+		<!-- Sīktēlā rādīs tikai stacijas logotipu. -->
+		<TaskbarItemInfo>
+			<TaskbarItemInfo.ThumbButtonInfos>
+				<!-- Skaņas atslēgšanas poga zem programmas sīktēla uzdevumu joslā. -->
+				<ThumbButtonInfo x:Name="muteTaskBtn" Click="MuteCmd_Executed" x:FieldModifier="private"/>
+				<ThumbButtonInfo x:Name="infoTaskBtn" Click="InformationCmd_Executed" x:FieldModifier="private" ImageSource="..\Information.png"/>
+			</TaskbarItemInfo.ThumbButtonInfos>
+		</TaskbarItemInfo>
+	</Window.TaskbarItemInfo>
+	<Border BorderThickness="1" BorderBrush="{Binding Brand.WindowBorder}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="20"/><!-- Virsraksts -->
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="20"/><!-- Vadība -->
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="206"/><!-- Logo -->
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<!-- Virsraksts -->
+			<Rectangle Grid.ColumnSpan="2" Fill="{Binding Brand.CaptionBackground}" MouseLeftButtonDown="DragStart"/>
+			<Grid Grid.ColumnSpan="2" MouseRightButtonUp="ShowMenuFromHeader">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="20"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="20"/>
+					<ColumnDefinition Width="20"/>
+				</Grid.ColumnDefinitions>
+				<Grid.Resources>
+					<Style TargetType="Button">
+						<Setter Property="IsTabStop" Value="False"/>
+						<Setter Property="Focusable" Value="False"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border Name="Border" Background="Transparent">
+										<Path Name="Sign" Data="{TemplateBinding Content}" StrokeThickness="2" Stroke="{Binding Brand.CaptionForeground}" Margin="5" OpacityMask="{TemplateBinding Background}"/>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter Property="Stroke" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" TargetName="Sign"/>
+											<Setter Property="Background" Value="{StaticResource ButtonBackground}" TargetName="Border"/>
+										</Trigger>
+										<Trigger Property="IsPressed" Value="True">
+											<Setter Property="RenderTransform" TargetName="Border">
+												<Setter.Value>
+													<TranslateTransform Y="1"/>
+												</Setter.Value>
+											</Setter>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</Grid.Resources>
+				<Button x:Name="menuBtn" PreviewMouseLeftButtonDown="ShowMenuFromButton" Foreground="#02A7D6" x:FieldModifier="private">
+					<Geometry>M0,1 L9,1 M0,5 L9,5 M0,9 L9,9</Geometry>
+				</Button>
+				<TextBlock Grid.Column="1" Text="{Binding Caption, NotifyOnTargetUpdated=True}" Padding="0,1,2,0" Foreground="{Binding Brand.CaptionForeground}" MouseLeftButtonDown="DragStart" l:Attached.TrimAndShowToolTip="{StaticResource CaptionTooltip}"/>
+				<TextBlock x:Name="clock" Grid.Column="2" Foreground="{Binding Brand.CaptionForeground}" Margin="2" MouseLeftButtonDown="DragStart" ToolTip="Laiks studijā"/>
+				<Button Grid.Column="3" Click="MinimizeWindow" Foreground="#06C317" ToolTip="Minimizēt">
+					<Geometry>M0,9 L9,9</Geometry>
+				</Button>
+				<Button Grid.Column="4" Click="CloseWindow" Foreground="{StaticResource WarningBrush}" ToolTip="Aizvērt">
+					<Geometry>M0,0 L9,9 M9,0 L0,9</Geometry>
+				</Button>
+			</Grid>
+
+			<Rectangle x:Name="logoBackground" Grid.Row="1" Grid.RowSpan="2" Fill="{Binding Brand.LogoBackground}" x:FieldModifier="private"/>
+			<Image Grid.Row="1" x:Name="channelLogo" Stretch="None" Source="{Binding Logo}" x:FieldModifier="private" IsHitTestVisible="False"/>
+
+			<!-- Raidījumu saraksts -->
+			<Grid x:Name="guidePanel" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Background="{Binding Brand.GuideBackground}" x:FieldModifier="private">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="22"/>
+					<RowDefinition Height="20" x:Name="currentRow" x:FieldModifier="private"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="22"/>
+					<RowDefinition Height="55"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="36"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Rectangle x:Name="progressBarBack" Grid.Row="1" Grid.ColumnSpan="2" Fill="{Binding Brand.StatusForeground}" Height="2" VerticalAlignment="Bottom" Opacity="0.3" x:FieldModifier="private"/>
+				<Rectangle x:Name="progressBar" Grid.Row="1" Grid.ColumnSpan="2" Fill="{Binding Brand.StatusForeground}" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" x:FieldModifier="private"/>
+
+				<TextBlock Text="{Binding Guide.PreviousBroadcast.StartTime, StringFormat=H:mm}" TextAlignment="Right" ContextMenu="{StaticResource PreviousBroadcastMenu}" Padding="0,1,4,1" Margin="0,0,0,2"/>
+				<TextBlock Grid.Column="1" Text="{Binding Guide.PreviousBroadcast.Caption, NotifyOnTargetUpdated=True}" Padding="0,1,4,1" Margin="0,0,0,2" l:Attached.TrimAndShowToolTip="{StaticResource CaptionTooltip}" ContextMenu="{StaticResource PreviousBroadcastMenu}"/>
+				<TextBlock Grid.Row="1" Text="{Binding Guide.CurrentBroadcast.StartTime, StringFormat=H:mm}" FontWeight="Bold" TextAlignment="Right" Padding="0,1,4,1" ContextMenu="{StaticResource CurrentBroadcastMenu}"/>
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Guide.CurrentBroadcast.Caption, NotifyOnTargetUpdated=True}" Padding="0,1,4,1" l:Attached.TrimAndShowToolTip="{StaticResource CaptionTooltip}" ContextMenu="{StaticResource CurrentBroadcastMenu}"/>
+				<TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Guide.CurrentBroadcast.Description, NotifyOnTargetUpdated=True}" TextWrapping="Wrap" Padding="2,1,2,0" LineHeight="18" l:Attached.TrimAndShowToolTip="{StaticResource DescriptionTooltip}" ContextMenu="{StaticResource CurrentBroadcastMenu}"/>
+				<TextBlock Grid.Row="3" Text="{Binding Guide.NextBroadcast.StartTime, StringFormat=H:mm}" TextAlignment="Right" Padding="0,1,4,1" Margin="0,2,0,0"/>
+				<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Guide.NextBroadcast.Caption, NotifyOnTargetUpdated=True}" Padding="0,1,4,1" Margin="0,2,0,0" l:Attached.TrimAndShowToolTip="{StaticResource CaptionTooltip}"/>
+				<TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding Guide.NextBroadcast.Description, NotifyOnTargetUpdated=True}" TextWrapping="Wrap" Padding="2,1,2,0" LineHeight="18" l:Attached.TrimAndShowToolTip="{StaticResource DescriptionTooltip}"/>
+			</Grid>
+
+			<!-- Stāvoklis -->
+			<l:PlaybackStateDisplay Grid.Row="2" State="{Binding PlaybackState}" Foreground="{Binding Brand.StatusForeground}"/>
+			<StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+				<ToggleButton x:Name="muteBtn" IsChecked="{Binding IsMuted, Mode=OneWay}" Command="MediaCommands.MuteVolume" Margin="0,0,2,0" Width="20" FocusVisualStyle="{x:Null}" x:FieldModifier="private"><!-- lai komanda darbotos, Binding.Mode ir jābūt OneWay -->
+					<ToggleButton.Template>
+						<ControlTemplate TargetType="ToggleButton">
+							<Border Name="Border" Background="Transparent">
+								<Canvas Width="16" Height="14" Margin="2">
+									<Path Fill="{Binding Brand.StatusForeground}" Data="M0,5 L2,5 L6,0 L6,13 L2,8 L0,8 Z"/>
+									<!-- Unmuted -->
+									<Path Name="Wave1" StrokeThickness="1" Stroke="{Binding Brand.StatusForeground}" Data="M7,4 C9,6 9,7 7,9"/>
+									<Path Name="Wave2" StrokeThickness="1" Stroke="{Binding Brand.StatusForeground}" Data="M10,2.5 C12,5 12,8 10,10.5"/>
+									<Path Name="Wave3" StrokeThickness="1" Stroke="{Binding Brand.StatusForeground}" Data="M12,0 C16,5 16,8 12,13"/>
+									<!-- Muted -->
+									<Ellipse Name="Sign" Canvas.Left="7" Canvas.Top="6" Width="7" Height="7" StrokeThickness="1" Stroke="{StaticResource WarningBrush}"/>
+									<Line Name="Strike" X1="8" Y1="7" X2="13" Y2="12" StrokeThickness="1" Stroke="{StaticResource WarningBrush}"/>
+								</Canvas>
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsEnabled" Value="False">
+									<Setter Property="Opacity" Value="0.5" TargetName="Border"/>
+								</Trigger>
+								<Trigger Property="IsEnabled" Value="True">
+									<Setter Property="Opacity" Value="1" TargetName="Border"/>
+								</Trigger>
+								<Trigger Property="IsChecked" Value="True">
+									<Setter Property="Visibility" Value="Collapsed" TargetName="Wave1"/>
+									<Setter Property="Visibility" Value="Collapsed" TargetName="Wave2"/>
+									<Setter Property="Visibility" Value="Collapsed" TargetName="Wave3"/>
+									<Setter Property="Visibility" Value="Visible" TargetName="Sign"/>
+									<Setter Property="Visibility" Value="Visible" TargetName="Strike"/>
+								</Trigger>
+								<Trigger Property="IsChecked" Value="False">
+									<Setter Property="Visibility" Value="Visible" TargetName="Wave1"/>
+									<Setter Property="Visibility" Value="Visible" TargetName="Wave2"/>
+									<Setter Property="Visibility" Value="Visible" TargetName="Wave3"/>
+									<Setter Property="Visibility" Value="Collapsed" TargetName="Sign"/>
+									<Setter Property="Visibility" Value="Collapsed" TargetName="Strike"/>
+								</Trigger>
+								<Trigger Property="IsFocused" Value="True">
+									<Setter Property="Background" Value="#40F0FFFF" TargetName="Border"/>
+								</Trigger>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter Property="Background" Value="#40F0FFFF" TargetName="Border"/>
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</ToggleButton.Template>
+				</ToggleButton>
+				<Slider x:Name="volumeSlider" Margin="2,0" Width="100" Height="16" Minimum="0" Maximum="1" Value="{Binding Volume}" SmallChange="0.01" LargeChange="0.1" IsEnabled="{Binding IsEnabled, ElementName=muteBtn}" Foreground="{Binding Brand.StatusForeground}" FocusVisualStyle="{x:Null}" x:FieldModifier="private">
+					<Slider.ToolTip>
+						<TextBlock Text="{Binding Volume, StringFormat=Skaļums \{0:P0\}}"/>
+					</Slider.ToolTip>
+					<Slider.Template>
+						<ControlTemplate TargetType="Slider">
+							<Grid>
+								<Path Data="M0,1 L1,0 L1,1 Z" Stretch="Fill" Fill="{TemplateBinding Foreground}" Margin="3,0">
+									<Path.OpacityMask>
+										<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+											<GradientStop Color="#FF000000" Offset="0"/>
+											<GradientStop Color="#FF000000" Offset="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Slider, AncestorLevel=1}, Path=Value, Mode=OneWay}"/>
+											<GradientStop Color="#50000000" Offset="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Slider, AncestorLevel=1}, Path=Value, Mode=OneWay}"/>
+											<GradientStop Color="#50000000" Offset="1"/>
+										</LinearGradientBrush>
+									</Path.OpacityMask>
+								</Path>
+								<Track Name="PART_Track">
+									<Track.Resources>
+										<Style TargetType="RepeatButton">
+											<Setter Property="Template">
+												<Setter.Value>
+													<ControlTemplate TargetType="RepeatButton">
+														<Rectangle Fill="Transparent"/>
+													</ControlTemplate>
+												</Setter.Value>
+											</Setter>
+										</Style>
+									</Track.Resources>
+									<Track.DecreaseRepeatButton>
+										<RepeatButton Command="{x:Static Slider.DecreaseLarge}" Focusable="False"/>
+									</Track.DecreaseRepeatButton>
+									<Track.IncreaseRepeatButton>
+										<RepeatButton Command="{x:Static Slider.IncreaseLarge}" Focusable="False"/>
+									</Track.IncreaseRepeatButton>
+									<Track.Thumb>
+										<Thumb Name="Thumb" Foreground="{TemplateBinding Foreground}" Width="7" Visibility="Collapsed">
+											<Thumb.Template>
+												<ControlTemplate TargetType="{x:Type Thumb}">
+													<Grid>
+														<Rectangle Fill="{StaticResource ButtonBackground}"/>
+														<Rectangle Fill="{TemplateBinding Foreground}" Width="1" SnapsToDevicePixels="True"/>
+													</Grid>
+												</ControlTemplate>
+											</Thumb.Template>
+										</Thumb>
+									</Track.Thumb>
+								</Track>
+							</Grid>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsFocused" Value="True">
+									<Setter TargetName="Thumb" Property="Visibility" Value="Visible"/>
+								</Trigger>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter TargetName="Thumb" Property="Visibility" Value="Visible"/>
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Slider.Template>
+				</Slider>
+			</StackPanel>
+		</Grid>
+	</Border>
+</Window>

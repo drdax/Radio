@@ -1,0 +1,9 @@
+﻿<l:StudioWindowBase x:Class="DrDax.RadioClient.StudioWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:l="clr-namespace:DrDax.RadioClient">
+	<Grid>
+		<MediaElement x:Name="player" x:FieldModifier="private" IsMuted="True"/>
+		<l:PlaybackStateDisplay x:Name="stateDisplay" Foreground="White" Background="#80000000" x:FieldModifier="private"/>
+	</Grid>
+</l:StudioWindowBase>

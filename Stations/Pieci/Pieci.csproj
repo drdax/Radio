@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2E3B16AD-27AA-41C4-8DD4-EA120A9F1320}</ProjectGuid>
+    <RootNamespace>Pieci</RootNamespace>
+    <Win32Resource>Pieci.res</Win32Resource>
+  </PropertyGroup>
+  <Import Project="..\Station.targets" />
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="ChannelItem.cs" />
+    <Compile Include="ChannelMenu.cs" />
+    <Compile Include="ChannelsWindow.xaml.cs">
+      <DependentUpon>ChannelsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PieciGuide.cs" />
+    <Compile Include="PieciListedGuide.cs" />
+    <Compile Include="PieciStation.cs" />
+    <Compile Include="PlaylistItem.cs" />
+    <Compile Include="PlaylistWindow.xaml.cs">
+      <DependentUpon>PlaylistWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Pieci.res" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ChannelsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlaylistWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

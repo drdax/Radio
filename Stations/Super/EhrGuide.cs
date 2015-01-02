@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DrDax.RadioClient;
 
 namespace Super {
@@ -11,8 +12,8 @@ namespace Super {
 			titleRx=new Regex(@"^(Nr\. (?'position'[0-9]+) )?-ARTIST- ?(?'artist'.+) ?-TITLE- ?(?'title'.+?)(?'first' ?-FIRST ON AIR-(?'month'[01][0-9])\.(?'year'[0-9]{4}))?$", RegexOptions.Compiled),
 			namesRx=new Regex("^Varda dienu svin- (.+)", RegexOptions.Compiled);
 
-		protected override Broadcast GetBroadcast(string title) {
-			if (string.IsNullOrEmpty(title)) return null;
+		protected override Task<Broadcast> GetBroadcast(string title) {
+			if (string.IsNullOrEmpty(title)) return NullTaskBroadcast;
 			string caption, description;
 			Match match=titleRx.Match(title);
 			if (match.Success) {
@@ -42,9 +43,10 @@ namespace Super {
 				if (match.Success) {
 					caption=match.Groups[1].Value.Trim();
 					description="vārdadienas svinētāji";
-				} else return null;
+				}
+				else return NullTaskBroadcast;
 			}
-			return new Broadcast(DateTime.Now, DateTime.Now.AddHours(1), caption, description);
+			return Task.FromResult(new Broadcast(DateTime.Now, DateTime.Now.AddHours(1), caption, description));
 		}
 	}
 }

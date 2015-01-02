@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DrDax.RadioClient {
 	/// <summary>
@@ -9,7 +7,7 @@ namespace DrDax.RadioClient {
 	/// </summary>
 	/// <remarks>Atslēga ir kanāla identifikators stacijas ietvaros.
 	/// Vērtība ir kanāla attēlojamais nosaukums un ikonas indekss resursos.</remarks>
-	public class StationChannelList : Dictionary<byte, Tuple<string, int>> {
+	public class StationChannelList : Dictionary<uint, Tuple<string, int>> {
 		private readonly bool autoIconIndex;
 		/// <param name="autoIconIndex">
 		/// Vai piešķirt ikonas indeksu, kurš sakrīt ar kanāla kārtas numuru. Pēc noklusējuma piešķir nulli.
@@ -19,10 +17,10 @@ namespace DrDax.RadioClient {
 			this.autoIconIndex=autoIconIndex;
 		}
 
-		public void Add(byte id, string caption, int iconIdx) {
+		public void Add(uint id, string caption, int iconIdx) {
 			Add(id, Tuple.Create(caption, iconIdx));
 		}
-		public void Add(byte id, string caption) {
+		public void Add(uint id, string caption) {
 			Add(id, Tuple.Create(caption, autoIconIndex ? base.Count:0));
 		}
 		public void Add(string caption) {

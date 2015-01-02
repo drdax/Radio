@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{706FE4B5-A517-4BCB-A87A-89122674CF6E}</ProjectGuid>
+    <RootNamespace>Mix</RootNamespace>
+    <ApplicationIcon>Mix.ico</ApplicationIcon>
+  </PropertyGroup>
+  <Import Project="..\Station.targets" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="ChannelMenu.cs" />
+    <Compile Include="MixStation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mix.ico" />
+    <Resource Include="995.png" />
+    <Resource Include="baltkom.png" />
+    <Resource Include="GoldFM.png" />
+    <Resource Include="MixFM.png" />
+  </ItemGroup>
+</Project>

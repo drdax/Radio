@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Globalization;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 using DrDax.RadioClient;
 
 namespace Bbc {
-	public class BbcGuide : DescriptionListedGuide {
-		private static readonly Regex dateRx=new Regex(@": [0-3][0-9]\/[01][0-9]\/[0-9]{4}", RegexOptions.Compiled),
-			broadcastRx=new Regex(@"episode-time"">[\s\S]+?<p>(?'time'[01]?[0-9]:[0-5][0-9](?'ampm'a|p))m<\/p>[\s\S]+?class=""episode-title""[\s\S]+?title=""(?'caption'[^""]+)""[\s\S]+?class=""episode-synopsis"">(?'description'[^<]+)<\/p>", RegexOptions.Compiled);
+	public class BbcGuide : PagedListedGuide {
+		/// <summary>Raidījumu saraksta lapas adrese bez datuma un formāta daļas.</summary>
 		private readonly string guideUrl;
-		private readonly DateTimeFormatInfo dateFormat=new CultureInfo("en-GB").DateTimeFormat;
 
-		internal BbcGuide(string radioName, TimeZoneInfo timezone) : base(timezone) {
-			this.guideUrl=string.Format("http://www.bbc.co.uk/iplayer/radio/bbc_{0}/", radioName);
-			dateFormat.AMDesignator="a"; dateFormat.PMDesignator="p";
-			Initialize();
+		internal BbcGuide(string guideUrl, TimeZoneInfo timezone)
+			: base(timezone, new SimpleGuideMenu("Programme Info", "http://www.bbc.co.uk/programmes/")) {
+			this.guideUrl=guideUrl;
 		}
 
-		protected override void FillGuide(DateTime date) {
-			string lastAmPm="a"; // Diena sākas sešos..
-			using (var client=new ProperWebClient()) {
-				foreach (Match match in broadcastRx.Matches(client.DownloadString(guideUrl+date.ToString("yyyyMMdd")))) {
-					if (match.Groups["ampm"].Value != lastAmPm) {
-						if (lastAmPm == "p") date=date.AddDays(1); // ..un beidzās nākošajā dienā sešos.
-						lastAmPm=match.Groups["ampm"].Value;
-					}
-					AddBroadcast(date.Add(DateTime.ParseExact(match.Groups["time"].Value, "h:mmt", dateFormat).TimeOfDay),
-						dateRx.Replace(match.Groups["caption"].Value, string.Empty), // Raidījuma datums tikai traucē.
-						match.Groups["description"].Value.Trim());
-				}
+		protected override async Task FillGuide(DateTime date) {
+			int lastDate=date.Day; string dateString=lastDate.ToString("00/"); // Dažiem raidījumiem norādīts to datums, ja tas sakrīt ar šodienu, nav vērts rādīt.
+			foreach (XElement xBroadcast in XDocument.Parse(
+				await client.DownloadStringTaskAsync(string.Concat(guideUrl, date.ToString(@"yyyy\/MM\/dd"), ".xml"))).
+				Root.Element("day").Element("broadcasts").Elements("broadcast")) {
+				DateTime startTime=DateTime.Parse(xBroadcast.Element("start").Value); // @"yyyy-MM-dd\THH:mm:ssZ", kur Z ir gan burts, gan UTC laika josla.
+				if (lastDate < startTime.Day) break; // Ņovērš pārklāšanos, kad raidījumu saraksts sākas ap pusnakti un beidzas nākamajā dienā ap sešiem.
+				var p=xBroadcast.Element("programme");
+				string subTitle=p.Element("title").Value; // Alternatīvs ceļš ir display_titles/subtitle
+				AddBroadcast(TimeZoneInfo.ConvertTime(startTime, timezone),
+					p.Element("display_titles").Element("title").Value,
+					subTitle.StartsWith(dateString) ? p.Element("short_synopsis").Value:string.Concat(subTitle, Environment.NewLine, p.Element("short_synopsis").Value),
+					p.Element("pid").Value
+				);
+				lastDate=startTime.Day;
 			}
 		}
 	}

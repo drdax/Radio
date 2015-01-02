@@ -1,102 +1,67 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DrDax.RadioClient;
 
 namespace Swh {
-	/// <summary>
-	/// SWH dienas raidījumu saraksts. Ar mokām ņemts no HTML, jo XML versija neatbilst patiesībai.
-	/// </summary>
 	public class SwhListedGuide : CaptionListedGuide {
-		private static readonly Regex
-			tagRx=new Regex("<[^>]+>", RegexOptions.Compiled), // HTML tega vienkāršojums.
-			blockCaptionRx=new Regex(@"<strong>(?'caption'[^012].+)", RegexOptions.Compiled), // Raidījumu grupas nosaukums.
-			broadcastRx=new Regex(@"(?'hours'[012][0-9])\.(?'minutes'[0-5][0-9]) ?(?'caption'.+)", RegexOptions.Compiled); // Raidījums ar sākumlaiku un nosaukumu.
-		/// <summary>Kanāla numurs: 1 SWH, 2 SWH+.</summary>
-		private readonly byte number;
-
-		internal SwhListedGuide(byte number, TimeZoneInfo timezone) : base(timezone) {
-			this.number=number;
-			Initialize();
+		private static readonly Regex broadcastRx=new Regex(@"^(?'start'[0-2][0-9]\.[0-5][0-9])( &#8211; (?'end'[0-2][0-9]\.[0-5][0-9]))?\s+(&#8220;)?(?'caption'[^0-9&\n].+?)(&#8221;)?\s*$", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
+		/// <summary>Vai SWH+ (true) vai SWH (false) kanāla raidījumu saraksts.</summary>
+		private readonly bool isPlus;
+		internal SwhListedGuide(bool isPlus, TimeZoneInfo timezone) : base(timezone, null) {
+			this.isPlus=isPlus;
 		}
-		// SWH raidījumu saraksti ir brīvi noformēti. Šī metode cenšas izgūt lielāko daļu raidījumu datu.
-		protected override void FillGuide(DateTime date) {
-			Regex blockRx=number == 1 ? new Regex(@"<td><strong> ?(?'start'[012][0-9])\.00 - (?'end'[012][0-9])\.00 ?<\/strong>( <strong><br \/><\/strong>)?</td>\r\n<td>(\r\n)?(?'broadcasts'.+?)(\r\n)?<\/td>")
-				: new Regex(@">(?'start'[012][0-9])\.00 - (?'end'[012][0-9])\.00[\s\S]+?<td>(?'broadcasts'[\s\S]+?)<\/td>", RegexOptions.Multiline);
-			// Diena sākas sešos vai septiņos. Pēdējais raidījums sākas šodien.
-			using (var client=new ProperWebClient())
-				foreach (Match block in blockRx.Matches(client.DownloadString(GetGuideUrl(date.DayOfWeek)))) {
-					string blockCaption=null, // Raidījumu bloka nosaukums.
-						broadcastsHtml=null; // Raidījumu laiki un nosaukumi.
-					bool emptyBlock=true; // Vai raidījumu blokā nav raidījumi ar savu laiku.
-					if (number == 1) // SWH
-						broadcastsHtml=block.Groups["broadcasts"].Value;
-					else { // SWH+
-						string[] ps=block.Groups["broadcasts"].Value.Replace("&nbsp;", " ").Split(new[] { "</p>\r\n<p>", "<br /><br />" }, StringSplitOptions.None);
-						if (ps[0].IndexOf(".00") == -1) { // Bloka nosaukumam nevajadzētu saturēt laiku.
-							blockCaption=tagRx.Replace(ps[0].Replace("<br />", " "), string.Empty).Trim();
-							if (ps.Length != 1) broadcastsHtml=ps[1];
-						} else {
-							if (ps.Length > 1) blockCaption=tagRx.Replace(ps[1], string.Empty).Trim();
-							broadcastsHtml=ps[0];
-						}
+		protected override async Task FillGuide(DateTime date) {
+			// Atstāj tikai tekstu, kuru vieglāk parsēt. Aiz borta paliek dažu raidījumu bloku mājaslapu adreses.
+			string html=htmlRx.Replace(await client.DownloadStringTaskAsync(GetGuideUrl(date.DayOfWeek)), string.Empty);
+			TimeSpan blockEndTime=new TimeSpan(0), previousStartTime=new TimeSpan(0); TimeSpan? blockStartTime=null; string blockCaption=null;
+			foreach (Match match in broadcastRx.Matches(html)) {
+				TimeSpan startTime=GetTime(match, "start");
+				if (startTime == previousStartTime) startTime+=TimeSpan.FromMinutes(5); // Ziņas un izklaides raidījumi parasti ir īsi.
+				if (blockStartTime.HasValue && startTime > blockStartTime) {
+					AddBroadcast(date.Add(blockStartTime.Value), blockCaption);
+					blockStartTime=null;
+				}
+				if (match.Groups["end"].Success) {
+					TimeSpan endTime=GetTime(match, "end");
+					if (blockEndTime < endTime) {
+						blockStartTime=startTime;
+						blockEndTime=endTime;
+						blockCaption=match.Groups["caption"].Value;
+					} else // Mēdz būt iekļautie bloki, kurus uzskata par parastu raidījumu.
+						AddBroadcast(date.Add(startTime), match.Groups["caption"].Value);
+				} else {
+					if (blockStartTime.HasValue && startTime > blockStartTime) {
+						AddBroadcast(date.Add(blockStartTime.Value), blockCaption);
+						blockStartTime=null;
 					}
-					DateTime time;
-					if (broadcastsHtml != null) {
-						DateTime endTime=date.AddHours(int.Parse(block.Groups["end"].Value));
-						string[] broadcasts=broadcastsHtml.Split(new[] { "<br />" }, StringSplitOptions.RemoveEmptyEntries);
-						if (blockCaption == null) // Noskaidro bloka nosaukumu.
-							for (int n=0; n < broadcasts.Length; n++) {
-								// Ja bloka nosaukuma iezīme atrodas iepriekšējā raidījumā.
-								if (broadcasts[n].EndsWith("<strong>") && n < broadcasts.Length-1 && !broadcastRx.IsMatch(broadcasts[n+1])) {
-									blockCaption=tagRx.Replace(broadcasts[n+1], string.Empty);
-									break;
-								}
-								// Ja bloka iezīme ir šajā raidījumā.
-								Match match=blockCaptionRx.Match(broadcasts[n]);
-								if (match.Success) {
-									blockCaption=tagRx.Replace(match.Groups["caption"].Value, string.Empty).Trim();
-									break;
-								}
-							}
-						// Savāc bloka raidījumus.
-						for (int n=0; n < broadcasts.Length; n++) {
-							Match match=broadcastRx.Match(tagRx.Replace(broadcasts[n], string.Empty));
-							if (match.Success) {
-								time=date.AddHours(int.Parse(match.Groups["hours"].Value)).AddMinutes(int.Parse(match.Groups["minutes"].Value));
-								// SWH ir raidījums, kuri pārklājas ar šeit iedomāto bloka laiku. Tas aizstāj bloka nosaukumu.
-								if (guide.Count != 0 && time == guide[guide.Count-1].Item1)
-									guide[guide.Count-1]=Tuple.Create(time, match.Groups["caption"].Value.Trim());
-								else AddBroadcast(time, match.Groups["caption"].Value.Trim());
-								time=time.AddMinutes(5); // Pieņemsim, ka ziņas ilgst piecas minūtes.
-								if (endTime > time && blockCaption != null)
-									AddBroadcast(time, blockCaption);
-								emptyBlock=false;
-							}
-						}
-					}
-					if (emptyBlock) {
-						time=date.AddHours(int.Parse(block.Groups["start"].Value));
-						// SWH+ programmā iepriekšejais bloks var saturēt raidījumu no nākamā. Tad bloka raidījumu pabīda uz priekšu.
-						AddBroadcast(guide.Count != 0 && time == guide[guide.Count-1].Item1 ? time.AddMinutes(5):time, blockCaption);
+					AddBroadcast(date.Add(startTime), match.Groups["caption"].Value);
+					previousStartTime=startTime;
+					if (startTime < blockEndTime) {
+						previousStartTime+=TimeSpan.FromMinutes(5);
+						AddBroadcast(date.Add(previousStartTime), blockCaption);
+						blockStartTime=null;
 					}
 				}
+			}
 		}
 		/// <returns>Nedēļas dienai <paramref name="day"/> atbilstošā raidījumu saraksta adrese.</returns>
 		private string GetGuideUrl(DayOfWeek day) {
-			if (number == 1) // SWH
-				return string.Format("http://www.radioswh.lv/swh/index.php?option=com_content&view=article&id=1{0:00}&Itemid=1{1}",
-					day == DayOfWeek.Sunday ? 10:3+(int)day, day == DayOfWeek.Sunday ? 44:37+(int)day);
-			// SWH+
-			string urlPrefix="http://www.radioswhplus.lv/index.php/2011-03-09-12-40-54/2011-03-25-11-5";
+			string dayName;
 			switch (day) {
-				case DayOfWeek.Monday:   return urlPrefix+"0-34";
-				case DayOfWeek.Tuesday:  return urlPrefix+"1-49";
-				case DayOfWeek.Wednesday:return urlPrefix+"2-34";
-				case DayOfWeek.Thursday: return urlPrefix+"3-46";
-				case DayOfWeek.Friday:   return urlPrefix+"4-34";
-				case DayOfWeek.Saturday: return urlPrefix+"5-01";
-				default:     /*Sunday*/  return urlPrefix+"5-30";
+				case DayOfWeek.Monday:   dayName=isPlus ? "den-1":"pirmdiena"; break;
+				case DayOfWeek.Tuesday:  dayName=isPlus ? "den-2":"otardiena"; break;
+				case DayOfWeek.Wednesday:dayName=isPlus ? "den-3":"tresdiena"; break;
+				case DayOfWeek.Thursday: dayName=isPlus ? "den-4":"ceturdiena"; break;
+				case DayOfWeek.Friday:   dayName=isPlus ? "den-5":"piektdiena"; break;
+				case DayOfWeek.Saturday: dayName=isPlus ? "суббота":"sestdiena"; break;
+				default:     /*Sunday*/  dayName=isPlus ? "den-7":"svetdiena"; break;
 			}
+			return string.Concat("http://www.radio", isPlus ? "swhplus":"swh", ".lv/", dayName, "/");
+		}
+		private TimeSpan GetTime(Match match, string timeName) {
+			return TimeSpan.ParseExact(match.Groups[timeName].Value, "hh\\.mm", CultureInfo.InvariantCulture);
 		}
 	}
 }

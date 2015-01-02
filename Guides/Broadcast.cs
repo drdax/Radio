@@ -24,5 +24,10 @@ namespace DrDax.RadioClient {
 			this.startTime=startTime; this.endTime=endTime;
 			this.caption=caption; this.description=description;
 		}
+		#if DEBUG
+		public override string ToString() {
+			return string.Concat(startTime.ToString("d.HH:mm:ss"), ", ", endTime.ToString("d.HH:mm:ss"), ", ", caption, ", ", description);
+		}
+		#endif
 	}
 }

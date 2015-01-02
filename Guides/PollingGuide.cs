@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace DrDax.RadioClient {
@@ -9,29 +10,27 @@ namespace DrDax.RadioClient {
 		private readonly Timer guideTimer=new Timer();
 		/// <summary>HTTP klients raidījma datu izgūšanai.</summary>
 		protected readonly ProperWebClient client=new ProperWebClient();
-		public override bool HasKnownDuration { get { return false; } }
 
-		protected PollingGuide() {
-			client=new ProperWebClient();
-		}
+		protected PollingGuide(int timerTimeout, Menu<Guide> menu) : this(timerTimeout, Encoding.UTF8, menu) {}
+		/// <param name="timerTimeout">Raidījumu saraksta izgūšanas biežums sekundēs.</param>
 		/// <param name="clientEncoding">HTTP klienta kodu tabula.</param>
-		protected PollingGuide(Encoding clientEncoding) {
-			client=new ProperWebClient(clientEncoding);
+		protected PollingGuide(int timerTimeout, Encoding clientEncoding, Menu<Guide> menu) : base(menu, false, false) {
+			guideTimer.Interval=timerTimeout*1000;
+			client.Encoding=clientEncoding;
+			guideTimer.AutoReset=true;
+			guideTimer.Elapsed+=guideTimer_Elapsed;
 		}
 
 		/// <summary>Nomaina aktuālos raidījumus.</summary>
-		protected abstract void UpdateBroadcasts();
+		protected abstract Task UpdateBroadcasts();
 
-		/// <summary>
-		/// Palaiž raidījumu saraksta izgūšanas taimeri. Šī metode jāizsauc pareizā brīdī konstruktorā.
-		/// </summary>
-		/// <param name="timeout">Raidījumu saraksta izgūšanas biežums sekundēs.</param>
-		protected void StartTimer(int timeout) {
-			guideTimer.AutoReset=true;
-			guideTimer.Elapsed+=guideTimer_Elapsed;
-			UpdateBroadcasts();
-			guideTimer.Interval=timeout*1000;
+		public override async Task Start(bool initialize) {
+			await UpdateBroadcasts();
 			guideTimer.Start();
+		}
+		public override void Stop() {
+			base.Stop();
+			guideTimer.Stop();
 		}
 		private void guideTimer_Elapsed(object sender, ElapsedEventArgs e) {
 			UpdateBroadcasts();
@@ -40,7 +39,6 @@ namespace DrDax.RadioClient {
 			guideTimer.Stop();
 			// Noņemam cirkulāro atsauci.
 			guideTimer.Elapsed-=guideTimer_Elapsed;
-			client.Dispose();
 		}
 	}
 }

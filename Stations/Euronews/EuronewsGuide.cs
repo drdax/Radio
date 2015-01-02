@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using DrDax.RadioClient;
 
@@ -18,21 +19,25 @@ namespace Euronews {
 		private readonly TimeZoneInfo timezone;
 		private readonly string guideUrl;
 
-		internal EuronewsGuide(byte number, TimeZoneInfo timezone) {
+		internal EuronewsGuide(uint number, TimeZoneInfo timezone) : base(TimerTimeout, null) {
 			// Sākotnējās izgūšanas laikam vajadzētu palīdzēt novērst nepareizo raidījumu secību.
 			guideUrl=string.Format("http://www.euronewsradio.com/winradio/prog{0}.xml?{1:yyyyMMddHHmmss}",
 				number == 1 ? string.Empty:number.ToString(), TimeZoneInfo.ConvertTime(DateTime.UtcNow, timezone));
 			this.timezone=timezone;
-			StartTimer(TimerTimeout);
 		}
 
-		protected override void UpdateBroadcasts() {
+		protected override async Task UpdateBroadcasts() {
 			// Raidījumi ir sakārtoti pēc sākumlaika dilstošā secībā.
-			XElement doc=XDocument.Parse(client.DownloadString(guideUrl)).Root;
-			Broadcast current=GetBroadcast(doc.Element("morceau"));
-			if (CurrentBroadcast == null || current.StartTime != CurrentBroadcast.StartTime) {
-				PreviousBroadcast=CurrentBroadcast ?? GetBroadcast(doc.Elements("morceau").ElementAt(1));
-				CurrentBroadcast=current;
+			try {
+				XElement doc=XDocument.Parse(await client.DownloadStringTaskAsync(guideUrl)).Root;
+				Broadcast current=GetBroadcast(doc.Element("morceau"));
+				if (CurrentBroadcast == null || current.StartTime != CurrentBroadcast.StartTime) {
+					PreviousBroadcast=CurrentBroadcast ?? GetBroadcast(doc.Elements("morceau").ElementAt(1));
+					CurrentBroadcast=current;
+				}
+			} catch {
+				// Retos gadījumos var trāpīties bojāts XML.
+				CurrentBroadcast=null;
 			}
 		}
 		private Broadcast GetBroadcast(XElement xml) {

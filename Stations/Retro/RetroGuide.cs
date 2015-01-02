@@ -7,7 +7,7 @@ namespace Retro {
 		protected const string StubCaption="Ретро FM"; // Oriģinālā teksts "Слушайте Ретро FM!", kuru liek song.js.
 		// http://en.wikipedia.org/wiki/Unix_time
 		protected static readonly DateTime unixEpoch=new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-		public RetroGuide() { StartTimer(); }
+		public RetroGuide() : base(null) {}
 
 		/// <returns>UNIX taimkods <paramref name="timestamp"/> klausītāja laika joslā.</returns>
 		protected static DateTime GetLocalTime(string timestamp) {

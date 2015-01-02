@@ -12,7 +12,7 @@ namespace DrDax.RadioClient {
 		/// Uzpeldošais padoms tiek automātiski pielikts vajadzības gadījumā.
 		/// </summary>
 		public static readonly DependencyProperty TrimAndShowToolTipProperty=DependencyProperty.RegisterAttached("TrimAndShowToolTip",
-				  typeof(Style), typeof(Attached), new PropertyMetadata(null, TrimAndShowToolTip_PropertyChanged));
+			typeof(Style), typeof(Attached), new PropertyMetadata(null, TrimAndShowToolTip_PropertyChanged));
 
 		// Obligātās īpašības iestatīšanas/nolasīšanas metodes.
 		public static Style GetTrimAndShowToolTip(DependencyObject obj) {
@@ -30,17 +30,25 @@ namespace DrDax.RadioClient {
 				textBlock.TextTrimming=TextTrimming.WordEllipsis;
 				//ComputeTrimAndShowToolTip(textBlock);
 				textBlock.TargetUpdated+=textBlock_TargetUpdated; // Lai šis notiktu, Binding.NotifyOnTargetUpdated jābūt true.
-			} else textBlock.TargetUpdated-=textBlock_TargetUpdated;
+				textBlock.SizeChanged+=textBlock_SizeChanged;
+			} else {
+				textBlock.TargetUpdated-=textBlock_TargetUpdated;
+				textBlock.SizeChanged-=textBlock_SizeChanged;
+			}
+		}
+
+		static void textBlock_SizeChanged(object sender, SizeChangedEventArgs e) {
+			ComputeTrimAndShowToolTip(sender as TextBlock);
 		}
 		private static void textBlock_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e) {
-			TextBlock textBlock=sender as TextBlock;
-			ComputeTrimAndShowToolTip(textBlock);
+			ComputeTrimAndShowToolTip(sender as TextBlock);
 		}
 
 		/// <summary>
 		/// Aprēķina vajadzību pēc uzpeldošā padoma un piešķir to teksta elementam <param name="textBlock"/>.
 		/// </summary>
 		private static void ComputeTrimAndShowToolTip(TextBlock textBlock) {
+			if (textBlock.Text == string.Empty) { textBlock.ToolTip=null; return; } // Neesošs teksts mēdz izmērities lielāks, nekā aizpildīts, tāpēc šeit novērš tukšos taisnstūrus.
 			textBlock.Measure(new Size(textBlock.TextWrapping == TextWrapping.Wrap ? textBlock.ActualWidth:Double.PositiveInfinity, Double.PositiveInfinity));
 			double measuredDimension, actualDimension;
 			if (textBlock.TextWrapping == TextWrapping.Wrap) {
@@ -51,11 +59,16 @@ namespace DrDax.RadioClient {
 				actualDimension=textBlock.ActualWidth;
 			}
 
-			if (actualDimension < measuredDimension)
+			if (actualDimension < measuredDimension) {
+				// Garāku tekstu rāda ilgāk, lai paspēj izlasīt.
+				ToolTipService.SetShowDuration(textBlock, Math.Min(textBlock.Text.Length*200, 30000));
 				textBlock.ToolTip=new ToolTip {
 					Content=textBlock.Text, Style=GetTrimAndShowToolTip(textBlock)
 				};
-			else textBlock.ToolTip=null;
+			} else {
+				ToolTipService.SetShowDuration(textBlock, 5000);
+				textBlock.ToolTip=null;
+			}
 		}
 		#endregion
 	}

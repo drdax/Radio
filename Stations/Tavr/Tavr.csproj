@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{0B52563F-A943-4C16-BE5F-A939890F57A1}</ProjectGuid>
+    <RootNamespace>Tavr</RootNamespace>
+    <Win32Resource>Tavr.res</Win32Resource>
+  </PropertyGroup>
+  <Import Project="..\Station.targets" />
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="HitBroadcast.cs" />
+    <Compile Include="ChannelMenu.cs" />
+    <Compile Include="HitGuide.cs" />
+    <Compile Include="HitGuideMenu.cs" />
+    <Compile Include="TavrStation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tavr.res" />
+    <Resource Include="HitFM.png" />
+    <Resource Include="Kiss.png" />
+    <Resource Include="Melodija.png" />
+    <Resource Include="Relax.png" />
+    <Resource Include="Roks.png" />
+    <Resource Include="Russkoe.png" />
+  </ItemGroup>
+</Project>

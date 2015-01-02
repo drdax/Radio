@@ -1,80 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{113E9FC6-0BB0-4FC8-891A-76FD063C0535}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Riga</RootNamespace>
-    <AssemblyName>Riga.Station</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup>
     <Win32Resource>Riga.res</Win32Resource>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Radio.csproj">
-      <Project>{1152163C-21A1-4559-BDAE-A96164FACE8C}</Project>
-      <Name>Radio</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\Station.targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CapitalGuide.cs" />
+    <Compile Include="CombinedIcyGuide.cs" />
     <Compile Include="KristigaisGuide.cs" />
+    <Compile Include="ChannelMenu.cs" />
+    <Compile Include="RigaGuide.cs" />
     <Compile Include="RigaStation.cs" />
     <Compile Include="StarGuide.cs" />
     <Compile Include="TopGuide.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Riga.res" />
-    <None Include="101.ico" />
-    <None Include="Capital.ico" />
-    <None Include="LKR.ico" />
-    <None Include="Riga.ico" />
-    <None Include="Skonto.ico" />
-    <None Include="Star.ico" />
-    <None Include="Top.ico" />
-    <Resource Include="101.png" />
     <Resource Include="Capital.png" />
     <Resource Include="LKR.png" />
     <Resource Include="Riga.png" />
-    <Resource Include="Skonto.png" />
     <Resource Include="Star.png" />
     <Resource Include="Top.png" />
+    <Resource Include="RigaBackground.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,9 +17,9 @@ namespace DrDax.RadioClient {
 		public const string ServiceUrl="net.pipe://localhost/RadioSwitch";
 		public void SetChannel(string id) {
 			// http://stackoverflow.com/questions/1906416/async-function-callback-using-object-owned-by-main-thread
-			Application.Current.Dispatcher.Invoke((Action)(() => {
+			Application.Current.Dispatcher.InvokeAsync((Action)(async () => {
 				try {
-					((MainWindow)Application.Current.MainWindow).Channel=((RadioApp)Application.Current).GetChannel(id);
+					await ((MainWindow)Application.Current.MainWindow).SetChannel(((RadioApp)Application.Current).GetChannel(id)).ConfigureAwait(false);
 				} catch (Exception ex) {
 					RadioApp.ShowError(ex.Message, "Kļūda pārslēdzot radio kanālu");
 				}

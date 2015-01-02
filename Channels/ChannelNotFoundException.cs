@@ -2,7 +2,7 @@
 
 namespace DrDax.RadioClient {
 	public class ChannelNotFoundException : Exception {
-		public ChannelNotFoundException(byte channelNumber) :
+		public ChannelNotFoundException(uint channelNumber) :
 			base(string.Format("Kanāls ar numuru {0} nav atrasts", channelNumber))
 		{}
 

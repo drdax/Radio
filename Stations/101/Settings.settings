@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Ru101" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Channels" Type="System.Collections.Generic.List&lt;Ru101.ChannelItem&gt;" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="WindowWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+    <Setting Name="WindowHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
+    <Setting Name="Region" Type="Ru101.Region" Scope="User">
+      <Value Profile="(Default)">ru</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

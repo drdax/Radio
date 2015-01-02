@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Xml;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using DrDax.RadioClient;
 
 namespace Retro {
 	/// <summary>Maskavas Ретро FM skanošās dziesmas.</summary>
 	public class RetroRuGuide : RetroGuide {
-		protected override void UpdateBroadcasts() {
+		protected override async Task UpdateBroadcasts() {
 			// Alternatīva bez ilgumiem ir http://retrofm.ru/online/air/song.js
 			// { "song": "WHAT A FEELING", "artist": "CARA IRENE" }
-			XElement json=XElement.Load(JsonReaderWriterFactory.CreateJsonReader(
-					client.DownloadData("http://retrofm.ru/online/air/playlist.js"),
-					XmlDictionaryReaderQuotas.Max));
 			/* Pēdējās trīs skanējušās dziesmas. Vienmēr latiņu burtiem.
 			   [ { "id": "5693", "name": "ALWAYS ON MY MIND", "artist": "BOYS PET SHOP", "start": "1357163566", "duration": "218" },
 			   { "id": "5691", "name": "ROZOVY VECHER+NY", "artist": "LASKOVY MAY SHATUNOV YURY", "start": "1357163391", "duration": "164" },
@@ -27,8 +23,8 @@ namespace Retro {
     <duration type="string">222</duration>
   </item>
 </root> */
-			System.Diagnostics.Debug.WriteLine(json.ToString());
 			DateTime now=DateTime.Now;
+			XElement json=await client.GetJson("http://retrofm.ru/online/air/playlist.js");
 			if (CurrentBroadcast == null)
 				PreviousBroadcast=GetBroadcast(json.Elements("item").ElementAt(1));
 			else if (CurrentBroadcast.Caption != StubCaption) PreviousBroadcast=CurrentBroadcast;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
@@ -14,25 +15,39 @@ namespace DrDax.RadioClient {
 		public RadioXmlStation() : base("Radio.xml") {}
 
 		/// <param name="number">Channel elementa kārtas numurs sākot ar nulli.</param>
-		public override Channel GetChannel(byte number) {
-			var channelX=radioDoc.Descendants("Channel").ElementAtOrDefault(number);
+		public override Channel GetChannel(uint number) {
+			if (radioDoc == null) return null;
+			var channelX=radioDoc.Descendants("Channel").ElementAtOrDefault((int)number);
 			if (channelX == null) throw new ChannelNotFoundException(number);
-			string url=channelX.Attribute("Url").Value;
-			Channel channel; BitmapImage logo; TimeZoneInfo timezone;
-			try {
-				logo=new BitmapImage();
-				logo.BeginInit();
-				logo.CacheOption=BitmapCacheOption.OnLoad;
-				logo.StreamSource=new MemoryStream(Convert.FromBase64String(radioDoc.Descendants("Logo").First(l => l.Attribute("Id").Value == channelX.Attribute("LogoId").Value).Value));
-				logo.EndInit();
-			} catch { logo=null; }
+			BitmapImage logo; TimeZoneInfo timezone;
+			string logoId=channelX.Attribute("LogoId") != null ? channelX.Attribute("LogoId").Value:null;
+			if (logoId == null) logo=null;
+			else try {
+					logo=new BitmapImage();
+					logo.BeginInit();
+					logo.CacheOption=BitmapCacheOption.OnLoad;
+					logo.StreamSource=new MemoryStream(Convert.FromBase64String(radioDoc.Descendants("Logo").First(l => l.Attribute("Id").Value == logoId).Value));
+					logo.EndInit();
+				} catch { logo=null; }
 			try {
 				timezone=TimeZoneInfo.FindSystemTimeZoneById(channelX.Attribute("Time").Value+" Standard Time");
 			} catch { timezone=null; }
-			if (url.StartsWith("mms")) channel=new MmsChannel(url, logo, timezone, null, null);
-			else if (url.StartsWith("http")) channel=new IcyHttpChannel(url, logo, timezone, null, null); // "Icy", lai atbalstītu plašāku kanālu loku.
-			else channel=null;
-			return channel;
+			var urlAttribute=channelX.Attribute("Url");
+			if (urlAttribute != null) return new UrlChannel(urlAttribute.Value, logo, timezone, false, null, null);
+			urlAttribute=channelX.Attribute("Icy");
+			if (urlAttribute != null) return new ForcedIcyChannel(urlAttribute.Value, logo, timezone, false, null, null);
+			urlAttribute=channelX.Attribute("IcyGuide");
+			if (urlAttribute != null) return new ForcedIcyChannel(urlAttribute.Value, logo, timezone, true, null, null);
+			throw new ChannelNotFoundException(number);
+		}
+		public override Guide GetGuide(uint channelNumber) {
+			return new SimpleIcyGuide();
+		}
+		public override string GetHomepage(uint number) {
+			var channelX=radioDoc.Descendants("Channel").ElementAtOrDefault((int)number);
+			var urlAttribute=channelX.Attribute("Homepage");
+			if (urlAttribute == null) return null;
+			return urlAttribute.Value;
 		}
 	}
 }

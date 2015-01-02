@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2970BD81-596B-4F52-82D5-A754A67EAAD7}</ProjectGuid>
+    <ApplicationIcon>Echo.ico</ApplicationIcon>
+    <RootNamespace>Echo</RootNamespace>
+  </PropertyGroup>
+  <Import Project="..\Station.targets" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="EchoGuide.cs" />
+    <Compile Include="EchoStation.cs" />
+    <Compile Include="ChannelMenu.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Echo.ico" />
+    <Resource Include="Echo.png" />
+  </ItemGroup>
+</Project>

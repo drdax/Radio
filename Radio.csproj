@@ -1,155 +1,197 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1152163C-21A1-4559-BDAE-A96164FACE8C}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DrDax.RadioClient</RootNamespace>
-    <AssemblyName>Radio</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <ApplicationIcon>Radio.ico</ApplicationIcon>
-    <StartupObject>DrDax.RadioClient.Program</StartupObject>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="NAudio">
-      <HintPath>.nuget\NAudio.1.6\lib\net20\NAudio.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="RadioApp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="Channels\FullReadStream.cs" />
-    <Compile Include="Channels\IcyHttpChannel.cs" />
-    <Compile Include="Channels\M3uFullReadStream.cs" />
-    <Compile Include="Channels\PlaybackState.cs" />
-    <Compile Include="Channels\StationChannelList.cs" />
-    <Compile Include="Guides\Broadcast.cs" />
-    <Compile Include="Channels\Channel.cs" />
-    <Compile Include="Channels\ChannelNotFoundException.cs" />
-    <Compile Include="Channels\EmptyChannel.cs" />
-    <Compile Include="Channels\HttpChannel.cs" />
-    <Compile Include="Channels\Brand.cs" />
-    <Compile Include="Guides\IcyGuide.cs" />
-    <Compile Include="Guides\Guide.cs" />
-    <Compile Include="Channels\RadioXmlStation.cs" />
-    <Compile Include="Channels\Station.cs" />
-    <Compile Include="Channels\MmsChannel.cs" />
-    <Compile Include="Channels\XmlStation.cs" />
-    <Compile Include="Guides\ListedGuides.cs" />
-    <Compile Include="Guides\PollingGuide.cs" />
-    <Compile Include="Guides\SimpleIcyGuide.cs" />
-    <Compile Include="Guides\TimedGuide.cs" />
-    <Compile Include="Util\Attached.cs" />
-    <Compile Include="Util\EnumToDisplayName.cs" />
-    <Compile Include="Util\IconLoader.cs" />
-    <Compile Include="Util\ProperWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Util\Extensions.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Channels\IcyFullReadStream.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="RadioApp.cs" />
-    <Compile Include="RadioSwitch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Radio.ico" />
-    <Resource Include="Mute.png" />
-    <Resource Include="Unmute.png" />
-    <Resource Include="Radio.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Radio.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<ProductVersion>8.0.30703</ProductVersion>
+		<SchemaVersion>2.0</SchemaVersion>
+		<ProjectGuid>{1152163C-21A1-4559-BDAE-A96164FACE8C}</ProjectGuid>
+		<OutputType>WinExe</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>DrDax.RadioClient</RootNamespace>
+		<AssemblyName>Radio</AssemblyName>
+		<TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+		<FileAlignment>512</FileAlignment>
+		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+		<WarningLevel>4</WarningLevel>
+		<ApplicationIcon>Radio.ico</ApplicationIcon>
+		<StartupObject>DrDax.RadioClient.RadioApp</StartupObject>
+		<MapFileExtensions>true</MapFileExtensions>
+		<ApplicationRevision>0</ApplicationRevision>
+		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+		<IsWebBootstrapper>false</IsWebBootstrapper>
+		<UseApplicationTrust>false</UseApplicationTrust>
+		<BootstrapperEnabled>true</BootstrapperEnabled>
+		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
+		<RestorePackages>true</RestorePackages>
+		<!-- Aizliedz dokumentācijas XML kopēšanu uz rezultāta mapi. -->
+		<AllowedReferenceRelatedFileExtensions>*.xml</AllowedReferenceRelatedFileExtensions>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DebugType>full</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<UseVSHostingProcess>false</UseVSHostingProcess>
+		<GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+		<CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+		<Prefer32Bit>false</Prefer32Bit>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>none</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<UseVSHostingProcess>false</UseVSHostingProcess>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+		<CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+		<Prefer32Bit>false</Prefer32Bit>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="NAudio">
+			<HintPath>.nuget\NAudio.1.7\lib\net35\NAudio.dll</HintPath>
+		</Reference>
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+		<Reference Include="System" />
+		<Reference Include="System.ComponentModel.Composition" />
+		<Reference Include="System.ComponentModel.Composition.Registration" />
+		<Reference Include="System.ComponentModel.DataAnnotations" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.Reflection.Context" />
+		<Reference Include="System.Runtime.Serialization" />
+		<Reference Include="System.ServiceModel" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Xaml" />
+		<Reference Include="System.Xml" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.configuration" />
+		<Reference Include="UIAutomationClient" />
+		<Reference Include="UIAutomationTypes" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="Channels\Brand.cs" />
+		<Compile Include="Channels\Channel.cs" />
+		<Compile Include="Channels\ChannelNotFoundException.cs" />
+		<Compile Include="Channels\DynamicStation.cs" />
+		<Compile Include="Channels\EmptyChannel.cs" />
+		<Compile Include="Channels\ForcedIcyChannel.cs" />
+		<Compile Include="Channels\FullReadStream.cs" />
+		<Compile Include="Channels\IcyChannel.cs" />
+		<Compile Include="Channels\IcyStream.cs" />
+		<Compile Include="Channels\PlaybackState.cs" />
+		<Compile Include="Channels\RadioXmlStation.cs" />
+		<Compile Include="Channels\SegmentedStream.cs" />
+		<Compile Include="Channels\Station.cs" />
+		<Compile Include="Channels\StationChannelList.cs" />
+		<Compile Include="Channels\StreamChannels.cs" />
+		<Compile Include="Channels\UrlChannel.cs" />
+		<Compile Include="Channels\XmlStation.cs" />
+		<Compile Include="Guides\Broadcast.cs" />
+		<Compile Include="Guides\Guide.cs" />
+		<Compile Include="Guides\IcyGuide.cs" />
+		<Compile Include="Guides\ListedGuides.cs" />
+		<Compile Include="Guides\PagedBroadcast.cs" />
+		<Compile Include="Guides\PollingGuide.cs" />
+		<Compile Include="Guides\SimpleGuideMenu.cs" />
+		<Compile Include="Guides\SimpleIcyGuide.cs" />
+		<Compile Include="Guides\TimedGuide.cs" />
+		<Compile Include="Settings.cs" />
+		<Compile Include="UI\Menu.cs" />
+		<Compile Include="UI\MenuItemList.cs" />
+		<Compile Include="UI\ProperWindow.cs" />
+		<Compile Include="UI\StuidoWindowBase.cs" />
+		<Compile Include="Util\Attached.cs" />
+		<Compile Include="Util\DefaultProgram.cs" />
+		<Compile Include="Util\EnumToDisplayName.cs" />
+		<Compile Include="Util\Extensions.cs" />
+		<Compile Include="Util\IconLoader.cs" />
+		<Compile Include="Util\MenuHelper.cs" />
+		<Compile Include="Util\MouseHelper.cs" />
+		<Compile Include="Util\ProperWebClient.cs" />
+		<Compile Include="Util\VideoServer.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<Page Include="RadioApp.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="UI\AboutWindow.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Compile Include="UI\AboutWindow.xaml.cs">
+			<DependentUpon>AboutWindow.xaml</DependentUpon>
+		</Compile>
+		<Page Include="UI\PlaybackStateDisplay.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Compile Include="UI\PlaybackStateDisplay.xaml.cs">
+			<DependentUpon>PlaybackStateDisplay.xaml</DependentUpon>
+		</Compile>
+		<Page Include="UI\StudioWindow.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Compile Include="UI\StudioWindow.xaml.cs">
+			<DependentUpon>StudioWindow.xaml</DependentUpon>
+		</Compile>
+		<Page Include="UI\MainWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Compile Include="UI\MainWindow.xaml.cs">
+			<DependentUpon>MainWindow.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="AssemblyInfo.cs" />
+		<Compile Include="Program.cs" />
+		<Compile Include="RadioApp.cs" />
+		<Compile Include="RadioSwitch.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="app.config" />
+		<None Include="packages.config" />
+		<None Include="Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+			<SubType>Designer</SubType>
+		</None>
+		<Compile Include="Settings.Designer.cs">
+			<AutoGen>True</AutoGen>
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="Radio.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Radio.ico" />
+		<Resource Include="Copy.png" />
+		<Resource Include="Information.png" />
+		<Resource Include="Mute.png" />
+		<Resource Include="Playlist.png" />
+		<Resource Include="Radio.png" />
+		<Resource Include="Settings.png" />
+		<Resource Include="Unmute.png" />
+		<Resource Include="Video.png" />
+	</ItemGroup>
+	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+	<!-- Izslēdz app.config kopēšanu uz rezultāta mapi. -->
+	<Target Name="_CopyAppConfigFile"/>
 </Project>
