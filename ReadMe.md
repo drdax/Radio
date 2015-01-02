@@ -25,17 +25,17 @@ Saīšņu saraksts ir tīrāms ar operētājsistēmas standartlīdzekļiem (kont
 Lai **atinstalētu** programmu, ja apnikuši visi kanāli, jādzēš atpakotās mapes saturu un mapi `C:\Users\{lietotāja vārds}\AppData\Local\Dr.Dax_Labs\Radio.exe_Url_{burti un cipari}` (šī mape jādzēš arī, ja palaišanas brīdī saņem paziņojumu _Configuration system failed to initialize_).
 
 ### Karstie taustiņi
-<kbd>G</kbd> Ieslēgt/izslēgt raidījumu sarakstu
-<kbd>T</kbd> Ieslēgt/izslēgt pulksteni ar studijas laiku
-<kbd>M</kbd> Ieslēgt/izslēgt skaņu
-<kbd>↑</kbd> Palielināt skaļumu
-<kbd>↓</kbd> Samazināt skaļumu
-<kbd>C</kbd> Kopēt uz starpliktuvi pašreizējā raidījuma datus
-<kbd>X</kbd> Kopēt iepriekšējā raidījuma datus
-<kbd>H</kbd> Atvērt kanāla mājaslapu
-<kbd>F1</kbd> Atvērt informācija par pašreizējo raidījumu
-<kbd>F2</kbd> Atvērt agrāk skanējušo raidījumu sarakstu
-<kbd>F3</kbd> Atvērt video translāciju no studijas
+<kbd>G</kbd> Ieslēgt/izslēgt raidījumu sarakstu<br/>
+<kbd>T</kbd> Ieslēgt/izslēgt pulksteni ar studijas laiku<br/>
+<kbd>M</kbd> Ieslēgt/izslēgt skaņu<br/>
+<kbd>↑</kbd> Palielināt skaļumu<br/>
+<kbd>↓</kbd> Samazināt skaļumu<br/>
+<kbd>C</kbd> Kopēt uz starpliktuvi pašreizējā raidījuma datus<br/>
+<kbd>X</kbd> Kopēt iepriekšējā raidījuma datus<br/>
+<kbd>H</kbd> Atvērt kanāla mājaslapu<br/>
+<kbd>F1</kbd> Atvērt informācija par pašreizējo raidījumu<br/>
+<kbd>F2</kbd> Atvērt agrāk skanējušo raidījumu sarakstu<br/>
+<kbd>F3</kbd> Atvērt video translāciju no studijas<br/>
 <kbd>F4</kbd> Atvērt stacijas iestatījumus
 
 ## Izstrādātājiem
